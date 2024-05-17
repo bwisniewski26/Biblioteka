@@ -1,0 +1,100 @@
+@using BlazorBootstrap
+@using ProjektZaliczeniowyPR3.Data
+@using ProjektZaliczeniowyPR3.Models
+
+@inject NavigationManager Navigator
+@page "/account"
+
+@if (!isLoggedIn)
+{
+    <div class = "login_prompt">
+        <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Zaloguj się</button>
+        <p>Nazwa użytkownika</p> 
+        <input @bind = "username">
+        <br/>
+        <p>Hasło</p>
+        <input @bind = "password">
+        <br/>
+    </div>
+
+}
+else
+{
+    <button Color="ButtonColor.Primary" @onclick = "ChangeAdmin">Zmień się w admina</button>
+    <p>Zalogowano!</p>
+    <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Wyloguj się</button>
+
+    @if (isAdmin)
+    {
+        <p>Dodaj nową książkę</p>
+        <br/>
+        <p>Tytuł</p>
+        <input @bind = "title">
+        <br/>
+        <p>Autor</p>
+        <input @bind = "author">
+        <p>Opis</p>
+        <input @bind = "desc">
+        <button @onclick = "AddBook">Zapisz</button>
+    }
+    else
+    {
+        <p>Wypożycz książki</p>
+    }
+}
+
+@code {
+        List<ToastMessage> messages = new List<ToastMessage>();
+        private bool isLoggedIn = false;
+        private bool isAdmin = false;
+
+
+        string username = "", password = "", title = "", author = "", desc = "";
+
+        private void LogIn()
+        {
+            isLoggedIn = !isLoggedIn;
+        }
+
+        private void ChangeAdmin()
+        {
+            isAdmin = !isAdmin;
+        }
+
+        private void AddBook()
+        {
+            if (title.Length > 0 && author.Length > 0)
+            {
+                Book ksiazka = new Book(title, author);
+                if (desc.Length > 0)
+                {
+                    ksiazka.Description = desc;
+                }
+
+                using (var db = new LibraryContext())
+                {
+                    try {
+                        db.Database.CanConnect();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    finally {}
+                    db.Books.Add(ksiazka);
+                    db.SaveChanges();
+                }
+            }
+            Navigator.NavigateTo("/browse");
+        }
+
+        private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
+
+        private ToastMessage CreateToastMessage(ToastType toastType)
+        => new ToastMessage
+        {
+            Type = toastType,
+            Title = isLoggedIn ? "Zalogowano pomyślnie" : "Wylogowano pomyślnie",
+            Message = isAdmin ? "Odblokowano dodawanie książek" : "Miłego wypożyczania! :)",
+        };
+}

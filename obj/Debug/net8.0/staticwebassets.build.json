@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "1rc9LQ7mwNfmckVyD3BsVWFshP2FlrytAiK94y1MCOM=",
+  "Hash": "OxEdaroALVJdkxwam72t3LPXvecZLf4JWCATZxPhB/I=",
   "Source": "ProjektZaliczeniowyPR3",
   "BasePath": "_content/ProjektZaliczeniowyPR3",
   "Mode": "Default",
@@ -186,6 +186,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\obj\\Debug\\net8.0\\scopedcss\\bundle\\ProjektZaliczeniowyPR3.styles.css"
+    },
+    {
+      "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ProjektZaliczeniowyPR3.bundle.scp.css",
+      "SourceId": "ProjektZaliczeniowyPR3",
+      "SourceType": "Computed",
+      "ContentRoot": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\",
+      "BasePath": "_content/ProjektZaliczeniowyPR3",
+      "RelativePath": "ProjektZaliczeniowyPR3.bundle.scp.css",
+      "AssetKind": "All",
+      "AssetMode": "Reference",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "ScopedCss",
+      "AssetTraitValue": "ProjectBundle",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ProjektZaliczeniowyPR3.bundle.scp.css"
     },
     {
       "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\app.css",

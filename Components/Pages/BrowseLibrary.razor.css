@@ -1,0 +1,14 @@
+table {
+    border: 0.1rem solid;
+    width: 100%;
+    text-align: center;
+}
+
+th, td {
+    line-height: 2rem;
+}
+
+td.book_title {
+    font-weight: bold;
+    
+}

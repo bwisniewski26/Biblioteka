@@ -1,0 +1,59 @@
+@page "/browse"
+@using Microsoft.Data.SqlClient
+@using ProjektZaliczeniowyPR3.Models
+@using ProjektZaliczeniowyPR3.Data;
+@inject NavigationManager Navigator
+@using static Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions;
+
+<h1>Zasoby biblioteki</h1>
+
+<div class = "table">
+    <table>
+        <thead>
+            <th>Tytuł</th>
+            <th>Autor</th>
+            <th>Dostępność</th>
+            <th>Opis</th>
+        </thead>
+        <tbody>
+            @foreach (var book in _books)
+            {
+            <td style = "book_title">@book.Title</td>
+            <td>@book.Author</td>
+            <td>@book.Description</td>
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+<button @onclick = "ClearTable">Wyczyść dane</button>
+
+@code {
+
+    [Parameter] public bool isLoggedIn { get; set; } = false;
+    [Parameter] public bool isAdmin { get; set; } = false;
+
+    List<Book> _books = new();
+
+    protected override void OnInitialized()
+    {
+        using (var db = new LibraryContext())
+        {
+            _books = db.Books
+                .OrderBy(b => b.Title)
+                .ToList();
+        }
+    }
+
+    protected void ClearTable()
+    {
+        using (var db = new LibraryContext())
+        {
+            db.Database.ExecuteSqlRaw("TRUNCATE TABLE \"Books\"");
+        }
+
+        Navigator.NavigateTo("/");
+    }
+}    

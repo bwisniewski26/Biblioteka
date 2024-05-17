@@ -1,4 +1,7 @@
 using ProjektZaliczeniowyPR3.Components;
+using ProjektZaliczeniowyPR3.Data;
+using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +10,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddBlazorBootstrap();
+builder.Services.AddDbContext<LibraryContext>(options =>
+            options.UseNpgsql(builder.Configuration.GetConnectionString("LibraryContext")));
 
 var app = builder.Build();
 

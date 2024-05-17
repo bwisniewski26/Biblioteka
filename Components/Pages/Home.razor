@@ -1,7 +1,38 @@
 ﻿@page "/"
+@using Microsoft.Data.SqlClient
+@using ProjektZaliczeniowyPR3.Models
+@using ProjektZaliczeniowyPR3.Data;
+@using ProjektZaliczeniowyPR3.DatabaseConnection;
 
 <PageTitle>Strona główna</PageTitle>
 
 <h1>Biblioteka</h1>
 
-Welcome to your new app.
+<b>Witamy w Bibliotece!</b><br/>
+Możesz swobodnie przeglądać nasze zasoby. W celu wypożyczenia wybranej książki należy się zalogować, lub w przypadku braku konta - zarejestrować.
+<br/>
+
+<div class = "database_status">
+    <p>Status połączenia z bazą danych:</p>
+    @if (!ifConnectionSuccessful)
+    {
+        <p style = "color: red">Brak połączenia!</p>
+    }
+    else
+    {
+        <p style = "color: green">Połączono pomyślnie</p>
+    }
+</div>
+
+
+@code
+{
+    bool ifConnectionSuccessful = false;
+
+    protected override void OnInitialized()
+    {
+
+    }
+
+}
+
