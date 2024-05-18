@@ -11,8 +11,8 @@ using ProjektZaliczeniowyPR3.Data;
 namespace ProjektZaliczeniowyPR3.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20240518125304_Third")]
-    partial class Third
+    [Migration("20240518200413_Fifth")]
+    partial class Fifth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -71,6 +71,9 @@ namespace ProjektZaliczeniowyPR3.Migrations
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("isAdmin")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 

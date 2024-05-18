@@ -11,8 +11,8 @@ using ProjektZaliczeniowyPR3.Data;
 namespace ProjektZaliczeniowyPR3.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20240518125001_Second")]
-    partial class Second
+    [Migration("20240518202931_Sixth")]
+    partial class Sixth
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,9 @@ namespace ProjektZaliczeniowyPR3.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("isAdmin")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.ToTable("users");
@@ -80,13 +83,13 @@ namespace ProjektZaliczeniowyPR3.Migrations
             modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.Book", b =>
                 {
                     b.HasOne("ProjektZaliczeniowyPR3.Models.User", null)
-                        .WithMany("_books")
+                        .WithMany("Books")
                         .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.User", b =>
                 {
-                    b.Navigation("_books");
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

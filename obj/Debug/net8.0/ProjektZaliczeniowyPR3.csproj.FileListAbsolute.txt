@@ -155,3 +155,4 @@ C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniow
 C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
 C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Pages\Register.razor.rz.scp.css
 C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Pages\DatabaseConnection.razor.rz.scp.css
+C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\RentedBooks.razor.rz.scp.css

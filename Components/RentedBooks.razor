@@ -1,0 +1,53 @@
+@using ProjektZaliczeniowyPR3.Components
+
+<h2>Wypożyczone książki</h2>
+
+@if (ifConnectionSuccessful)
+{
+    <div class = "table">
+        <table>
+            <thead>
+                <th>Tytuł</th>
+                <th>Autor</th>
+                <th>Opis</th>
+            </thead>
+            <tbody>
+                @if (_books is not null)
+                {
+                    @foreach (var book in _books)
+                    {
+                        <tr>
+                            <td style = "book_title">@book.Title</td>
+                            <td>@book.Author</td>
+                            <td>@book.Description</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+    </div>
+}
+
+@code
+{
+    [Parameter] public int UserId { get; set;} = -1;
+
+    [Parameter] public bool ifConnectionSuccessful { get; set; } = false;
+
+    public List<Book> _books { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+        if (ifConnectionSuccessful && UserId != -1)
+        {
+            Book book = new();
+            using (var db = new LibraryContext())
+            {
+                _books = db.books
+                    .Where(book => book.UserId == UserId)
+                    .ToList();
+            }
+        }
+    }
+}

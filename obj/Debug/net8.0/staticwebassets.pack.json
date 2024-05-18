@@ -5,8 +5,16 @@
       "PackagePath": "staticwebassets\\ProjektZaliczeniowyPR3.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\1paperpage.jpg",
+      "PackagePath": "staticwebassets\\1paperpage.jpg"
+    },
+    {
       "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\app.css",
       "PackagePath": "staticwebassets\\app.css"
+    },
+    {
+      "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\bookside.jpg",
+      "PackagePath": "staticwebassets\\bookside.jpg"
     },
     {
       "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\bootstrap\\bootstrap.min.css",
@@ -17,12 +25,16 @@
       "PackagePath": "staticwebassets\\bootstrap\\bootstrap.min.css.map"
     },
     {
+      "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\dololo.jpg",
+      "PackagePath": "staticwebassets\\dololo.jpg"
+    },
+    {
       "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\favicon.png",
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
-      "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\paperpage.jpg",
-      "PackagePath": "staticwebassets\\paperpage.jpg"
+      "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\oldbookcover.jpg",
+      "PackagePath": "staticwebassets\\oldbookcover.jpg"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.ProjektZaliczeniowyPR3.Microsoft.AspNetCore.StaticWebAssets.props",

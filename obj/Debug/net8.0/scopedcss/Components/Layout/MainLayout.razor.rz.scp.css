@@ -1,3 +1,20 @@
-div.page[b-wz8hpxp6ik] {
-    background-image: "/page/paperpage.jpg"
+main.page[b-wz8hpxp6ik] {
+    background-image: url("/dololo.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    background-size: 100% 100%;
+}
+
+div.bb-top-row[b-wz8hpxp6ik]
+{
+    background-color: gray;
+}
+
+a[b-wz8hpxp6ik]
+{
+    color: white;
+}
+
+.sidebar[b-wz8hpxp6ik] {
+    background-color: red;
 }

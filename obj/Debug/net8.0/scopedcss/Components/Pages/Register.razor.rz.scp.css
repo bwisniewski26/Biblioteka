@@ -16,3 +16,17 @@ div.database_status[b-hm9y1g10b9] {
     padding:5px; 
     bottom:0px;
 }
+
+div.register_prompt[b-hm9y1g10b9] 
+{
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    align-self: center;
+    margin: 0 auto;
+}
+
+input[b-hm9y1g10b9] {
+    background-image: url("/dololo.jpg");
+    opacity: 70%;
+}

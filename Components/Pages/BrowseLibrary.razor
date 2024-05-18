@@ -1,13 +1,16 @@
 @page "/browse"
 @using Microsoft.Data.SqlClient
+@using Microsoft.EntityFrameworkCore
 @using ProjektZaliczeniowyPR3.Models
 @using ProjektZaliczeniowyPR3.Data;
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 @inject NavigationManager Navigator
 @using static Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions;
 <PageTitle>Zasoby bazy danych</PageTitle>
-<h1>Zasoby biblioteki</h1>
+<h2>Zasoby biblioteki</h2>
 @if (ifConnectionSuccessful)
+{
+@if (!isLoggedIn)
 {
 <div class = "table">
     <table>
@@ -23,7 +26,14 @@
                 <tr>
                     <td style = "book_title">@book.Title</td>
                     <td>@book.Author</td>
-                    <td>Dostępna</td>
+                        @if (book.isAvailable)
+                        {
+                            <td>Dostępna</td>
+                        }
+                        else
+                        {
+                            <td>Niedostępna</td>
+                        }
                     <td>@book.Description</td>
                 </tr>
             }
@@ -31,19 +41,55 @@
         </tbody>
     </table>
 </div>
-<button @onclick = "ClearTable">Wyczyść dane</button>
+}
+else
+{
+    <p>ID: @id</p>
+    <p>ID Usera: @UserId</p>
+    <div class = "table">
+        <table>
+            <thead>
+                <th>Tytuł</th>
+                <th>Autor</th>
+                <th>Dostępność</th>
+                <th>Opis</th>
+                <th>Wypożycz</th>
+            </thead>
+            <tbody>
+                @foreach (var book in _books)
+                {
+                    <tr>
+                        <td style = "book_title">@book.Title</td>
+                        <td>@book.Author</td>
+                        @if (book.isAvailable)
+                        {
+                            <td>Dostępna</td>
+                        }
+                        else
+                        {
+                            <td>Niedostępna</td>
+                        }
+                        <td>@book.Description</td>
+                        <button id="@book.Id" @onclick = "() => RentBook(book.Id)" disabled = "@(!book.isAvailable)">@IconName.Cake</button>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+}
+
 }
 
 <div class = "database_status">
     <p>Status połączenia z bazą danych:</p>
     @if (!ifConnectionSuccessful)
     {
-        <p style = "color: red">Brak połączenia!</p>
-        <button>Zaktualizuj ustawienia</button>
+        <p style = "color: red"><b>Brak połączenia z bazą danych!</b></p>
     }
     else
     {
-        <p style = "color: green">Połączono pomyślnie</p>
+        <p style = "color: green"><b>Połączono pomyślnie</b></p>
     }
 </div>
 
@@ -53,6 +99,9 @@
     [Parameter] public bool isLoggedIn { get; set; } = false;
     [Parameter] public bool isAdmin { get; set; } = false;
 
+    [Parameter] public int UserId { get; set; } = -1;
+
+    int id = -1;
     List<Book> _books = new();
 
     protected override void OnInitialized()
@@ -73,13 +122,29 @@
         }
     }
 
-    protected void ClearTable()
+    protected void RentBook(int Id)
     {
+        id = Id;
         using (var db = new LibraryContext())
         {
-            db.Database.ExecuteSqlRaw("TRUNCATE TABLE \"Books\"");
-        }
+            Book book = new();
+            User user = new();
+            if (ifConnectionSuccessful)
+            {
+                book = db.books
+                .Single(book => book.Id == id);
+                book.isAvailable = false;
+                book.UserId = UserId;
+                db.Entry(book).State = EntityState.Modified;
+                db.SaveChanges();
+                user = db.users
+                .Single(user => user.Id == UserId);
 
-        Navigator.NavigateTo("/");
+                user.Books.Add(book);
+                db.Entry(user).State = EntityState.Modified;
+                db.SaveChanges();
+            }
+            
+        }
     }
 }    

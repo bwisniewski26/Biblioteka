@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ProjektZaliczeniowyPR3")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bf3f135d8f0fd0c39f597b41f86a77f0b9151c99")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c0d6969430fb2cf3a8b829e3d4d04078e36928c0")]
 [assembly: System.Reflection.AssemblyProductAttribute("ProjektZaliczeniowyPR3")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ProjektZaliczeniowyPR3")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

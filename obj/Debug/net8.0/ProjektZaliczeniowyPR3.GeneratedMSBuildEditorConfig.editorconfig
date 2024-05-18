@@ -69,3 +69,7 @@ build_metadata.AdditionalFiles.CssScope = b-9ey9q3cay0
 [C:/Users/Bartek/Desktop/Programowanie3/ProjektZaliczeniowyPR3/ProjektZaliczeniowyPR3/Components/Pages/Register.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xSZWdpc3Rlci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = b-hm9y1g10b9
+
+[C:/Users/Bartek/Desktop/Programowanie3/ProjektZaliczeniowyPR3/ProjektZaliczeniowyPR3/Components/RentedBooks.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSZW50ZWRCb29rcy5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = b-etush2ols5

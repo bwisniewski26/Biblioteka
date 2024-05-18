@@ -4,11 +4,11 @@ using ProjektZaliczeniowyPR3.Data;
 using System.Text.Json;
 
 public class ConnectionInfo {
-    public string _host = "";
-    public string _port = "";
-    public string _username = "";
-    public string _password = "";
-    public string _database = "";
+    public string _host { get; set; } = "";
+    public string _port { get; set; } = "";
+    public string _username { get; set; } = "";
+    public string _password { get; set; } = "";
+    public string _database { get; set; } = "";
 
     public ConnectionInfo() {}
     public ConnectionInfo(string host, string port, string username, string password, string database) 
@@ -30,7 +30,7 @@ public class ConnectionInfo {
 
         string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LibraryProject");
 
-        if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LibraryProject")))
+        if (!Directory.Exists(path))
         {
             Directory.CreateDirectory(path);
         }
@@ -72,7 +72,6 @@ public class ConnectionInfo {
     public bool TryConnection()
     {
         string connectionInfo = RetrieveConnectionString();
-
         if (connectionInfo == "File does not exit")
         {
             return false;
@@ -99,19 +98,10 @@ public class ConnectionInfo {
         return GenerateConnectionString();
     }
 
-    public void WriteDefault()
-    {
-        _host = "localhost";
-        _port = "5432";
-        _username = "postgres";
-        _database = "postgres";
-        _password = "1234";
-        PrepareToSave();
-    }
-
     public string ReadFromFile()
     {
-        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "library_database.json");
+        string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LibraryProject");
+        path = Path.Combine(path, "library_database.json");
         string json = "";
         if (File.Exists(path))
         {

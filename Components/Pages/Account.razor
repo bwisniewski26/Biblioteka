@@ -1,9 +1,12 @@
 @using BlazorBootstrap
+@using Microsoft.EntityFrameworkCore
 @using ProjektZaliczeniowyPR3.Data
 @using ProjektZaliczeniowyPR3.Models
+@using ProjektZaliczeniowyPR3.DatabaseConnection
 
 @inject NavigationManager Navigator
 @page "/account"
+@page "/account/{username}"
 
 <PageTitle>Panel użytkownika</PageTitle>
 
@@ -25,11 +28,13 @@
 }
 else
 {
-    <h1>Panel użytkownika</h1>
-    <button Color="ButtonColor.Primary" @onclick = "ChangeAdmin">Zmień się w admina</button>
-    <p>Zalogowano!</p>
-    <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Wyloguj się</button>
-
+    <div class = "logout_button">
+        <button Color="ButtonColor.Primary" @onclick = "LogOut" style = "button_login">Wyloguj się</button>
+    </div>
+    @if (loggedUser is not null)
+    {
+        <h2>Witaj @loggedUser.Username!</h2>
+    }
     @if (isAdmin)
     {
         <p>Dodaj nową książkę</p>
@@ -42,24 +47,60 @@ else
         <p>Opis</p>
         <input @bind = "desc">
         <button @onclick = "AddBook">Zapisz</button>
+        <br/>
+        <button @onclick = "ClearTable">Usuń wszystkie książki</button>
+        <br/>
+        <button @onclick = "ClearUsersTable">Usuń wszystkich użytkowników</button>
     }
     else
     {
         <p>Wypożycz książki</p>
+        @if (loggedUser is not null)
+        {
+           <BrowseLibrary isLoggedIn = "true" UserId="@loggedUser.Id"></BrowseLibrary>
+           <RentedBooks UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RentedBooks>
+        }
     }
 }
+
+<div class = "database_status">
+    <p>Status połączenia z bazą danych:</p>
+    @if (!ifConnectionSuccessful)
+    {
+        <p style = "color: red"><b>Brak połączenia z bazą danych!</b></p>
+    }
+    else
+    {
+        <p style = "color: green"><b>Połączono pomyślnie</b></p>
+    }
+</div>
 
 
 @code {
         List<ToastMessage> messages = new List<ToastMessage>();
+
+        User? loggedUser { get; set; } = new();
         private bool isLoggedIn = false;
         private bool isAdmin = false;
 
+        private bool ifConnectionSuccessful = false;
 
-        string username = "", password = "", title = "", author = "", desc = "", response = "";
+        [Parameter] public string username { get; set;} = "";
+        [Parameter] public string password { get; set;} = "";
 
+        string title = "", author = "", desc = "", response = "";
+
+        protected override void OnInitialized()
+        {
+            ConnectionInfo info = new();
+            ifConnectionSuccessful = info.TryConnection();
+        }
         private void LogIn()
         {
+            if (ifConnectionSuccessful == false)
+            {
+                return;
+            }
             List<User> users = new();
             using (var db = new LibraryContext())
                 {
@@ -71,7 +112,6 @@ else
                         Console.WriteLine(e.Message);
                     }
                     finally {}
-                    Console.WriteLine("Polaczenie sie udalo :3");
                     users = db.users
                     .ToList();
             }
@@ -84,21 +124,24 @@ else
                     {
                         isAdmin = login.isAdmin;
                         isLoggedIn = true;
+                        loggedUser = login;
                         ShowMessage(ToastType.Success);
                     }
                     else
                     {
                         response = "Niepoprawne hasło!";
+                        return;
                     }
                 }
             }
 
+            response = "Użytkownik o podanych danych nie istnieje!";
             
         }
 
-        private void ChangeAdmin()
+        private void LogOut()
         {
-            isAdmin = !isAdmin;
+            isLoggedIn = false;
         }
 
         private void AddBook()
@@ -125,7 +168,6 @@ else
                     db.SaveChanges();
                 }
             }
-            Navigator.NavigateTo("/browse");
         }
 
         private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
@@ -137,4 +179,24 @@ else
             Title = isLoggedIn ? "Zalogowano pomyślnie" : "Wylogowano pomyślnie",
             Message = isAdmin ? "Odblokowano dodawanie książek" : "Miłego wypożyczania! :)",
         };
+
+        protected void ClearTable()
+        {
+            using (var db = new LibraryContext())
+            {
+                db.Database.ExecuteSqlRaw("TRUNCATE TABLE books");
+            }
+
+            Navigator.NavigateTo("/browse");
+        }
+
+        protected void ClearUsersTable()
+        {
+            using (var db = new LibraryContext())
+            {
+                db.Database.ExecuteSqlRaw("TRUNCATE TABLE users CASCADE");
+            }
+
+            Navigator.NavigateTo("/");
+        }
 }

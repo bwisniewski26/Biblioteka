@@ -5,7 +5,7 @@
 namespace ProjektZaliczeniowyPR3.Migrations
 {
     /// <inheritdoc />
-    public partial class Third : Migration
+    public partial class Seventh : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

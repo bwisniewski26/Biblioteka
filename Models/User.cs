@@ -8,7 +8,7 @@ public class User
 
     public bool isAdmin { get; set;} = false;
  
-    public ICollection<Book> Books { get; set;} = null!;
+    public List<Book> Books { get; set;} = null!;
  
     public User()
     {}

@@ -7,7 +7,9 @@ public class Book
     public string Author { get; set; } = null!;
     public string? Description { get; set; }
 
-    public bool isAvailable { get; set; } = false;
+    public bool isAvailable { get; set; } = true;
+
+    public int? UserId { get; set; } = null;
 
 
     public Book()

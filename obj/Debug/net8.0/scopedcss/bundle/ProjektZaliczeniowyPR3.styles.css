@@ -1,8 +1,25 @@
 @import '_content/Blazor.Bootstrap/Blazor.Bootstrap.bundle.scp.css';
 
 /* _content/ProjektZaliczeniowyPR3/Components/Layout/MainLayout.razor.rz.scp.css */
-div.page[b-wz8hpxp6ik] {
-    background-image: "/page/paperpage.jpg"
+main.page[b-wz8hpxp6ik] {
+    background-image: url("/dololo.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed; 
+    background-size: 100% 100%;
+}
+
+div.bb-top-row[b-wz8hpxp6ik]
+{
+    background-color: gray;
+}
+
+a[b-wz8hpxp6ik]
+{
+    color: white;
+}
+
+.sidebar[b-wz8hpxp6ik] {
+    background-color: red;
 }
 /* _content/ProjektZaliczeniowyPR3/Components/Pages/About.razor.rz.scp.css */
 div.h1[b-z5u6rjc3ts] {
@@ -18,6 +35,15 @@ div.login_prompt[b-t1re1saon9]
     margin: 0 auto;
 }
 
+div.logout_button[b-t1re1saon9]
+{
+    text-align: right;
+    align-items: end;
+    align-self: center;
+    margin: 0 auto;
+    text-align: right; 
+    width: 100%;
+}
 
 div.button_login[b-t1re1saon9] {
     text-align: right;
@@ -25,9 +51,12 @@ div.button_login[b-t1re1saon9] {
     margin: auto;
 }
 
-div.page[b-t1re1saon9]
-{
-    background-image: url("/paperpage");
+div.database_status[b-t1re1saon9] {
+    position:fixed; 
+    width:100%; 
+    height:70px; 
+    padding:5px; 
+    bottom:0px;
 }
 /* _content/ProjektZaliczeniowyPR3/Components/Pages/BrowseLibrary.razor.rz.scp.css */
 table[b-17r6vhtn1u] {
@@ -94,4 +123,28 @@ div.database_status[b-hm9y1g10b9] {
     height:70px; 
     padding:5px; 
     bottom:0px;
+}
+
+div.register_prompt[b-hm9y1g10b9] 
+{
+    width: 100%;
+    align-items: center;
+    text-align: center;
+    align-self: center;
+    margin: 0 auto;
+}
+
+input[b-hm9y1g10b9] {
+    background-image: url("/dololo.jpg");
+    opacity: 70%;
+}
+/* _content/ProjektZaliczeniowyPR3/Components/RentedBooks.razor.rz.scp.css */
+table[b-etush2ols5] {
+    border: 0.1rem solid;
+    width: 100%;
+    text-align: center;
+}
+
+th[b-etush2ols5], td[b-etush2ols5] {
+    line-height: 2rem;
 }

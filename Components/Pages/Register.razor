@@ -4,27 +4,34 @@
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 @using ProjektZaliczeniowyPR3.Models
 
+@inject NavigationManager Navigator
+
+
 <PageTitle>Nowe konto</PageTitle>
-
 <h1>Nowe konto</h1><br/>
-<br/>
-<p>Nazwa użytkownika</p>
-<input @bind = "username">
+<div class = "register_prompt">
+    <p>Nazwa użytkownika</p>
+    <input @bind = "username">
+    <br/>
+    <p>Hasło</p>
+    <input @bind = "password">
+    <Switch @ref="adminSwitch" @bind-Value="isAdmin" Label="Czy użytkownik jest administratorem?"/>
+    <div class = "register_button">
+        <button @onclick = "AddUser">Zarejestruj</button>
+    </div>
+</div>
 
-<br/>
-<p>Hasło</p>
-<input @bind = "password">
-
-<Switch @ref="adminSwitch" @bind-Value="isAdmin" Label="Czy użytkownik jest administratorem?" />
-@if (username.Length == 0 || password.Length == 0)
+@if (displayErrorMessages)
 {
 <div class = "error_message" style = "color: red;">
-    @errorMessage
-</div>
-}
-else {
-<div class = "register_button">
-    <button @onclick = "AddUser">Zarejestruj</button>
+    @if (username.Length == 0)
+    {
+        @errorMessages[0]
+    }
+    @if (password.Length  == 0)
+    {
+        @errorMessages[1]
+    }
 </div>
 }
 
@@ -33,11 +40,11 @@ else {
     <p>Status połączenia z bazą danych:</p>
     @if (!ifConnectionSuccessful)
     {
-        <p style = "color: red">Brak połączenia z bazą danych!</p>
+        <p style = "color: red"><b>Brak połączenia z bazą danych!</b></p>
     }
     else
     {
-        <p style = "color: green">Pomyślnie połączono z bazą danych</p>
+        <p style = "color: green"><b>Połączono pomyślnie</b></p>
     }
 </div>
 
@@ -45,12 +52,13 @@ else {
 
     string username = "", password = "";
     private Switch adminSwitch = default!;
-    private bool isAdmin = false, ifConnectionSuccessful = false;
+    private bool isAdmin = false, ifConnectionSuccessful = false, displayErrorMessages = false;
 
     private void Disable() => adminSwitch.Disable();
 
     private void Enable() => adminSwitch.Enable();
-    string errorMessage = "Nie podano informacji!";
+
+    string[] errorMessages = ["Nie podano loginu!", "Nie podano hasła!"];
 
     protected override void OnInitialized()
     {
@@ -61,6 +69,11 @@ else {
 
     protected void AddUser()
     {
+        if (username.Length == 0 || password.Length == 0)
+        {
+            displayErrorMessages = true;
+            return;
+        }
         User newUser = new();
         newUser.Username = username;
         newUser.SetPassword(password);
@@ -79,6 +92,8 @@ else {
             db.users.Add(newUser);
             db.SaveChanges();
         }
+
+        Navigator.NavigateTo("/account");
 
     }
 }

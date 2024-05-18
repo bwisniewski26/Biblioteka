@@ -7,6 +7,15 @@ div.login_prompt
     margin: 0 auto;
 }
 
+div.logout_button
+{
+    text-align: right;
+    align-items: end;
+    align-self: center;
+    margin: 0 auto;
+    text-align: right; 
+    width: 100%;
+}
 
 div.button_login {
     text-align: right;
@@ -14,7 +23,10 @@ div.button_login {
     margin: auto;
 }
 
-div.page
-{
-    background-image: url("/paperpage");
+div.database_status {
+    position:fixed; 
+    width:100%; 
+    height:70px; 
+    padding:5px; 
+    bottom:0px;
 }

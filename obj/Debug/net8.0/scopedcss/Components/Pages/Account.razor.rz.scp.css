@@ -7,6 +7,15 @@ div.login_prompt[b-t1re1saon9]
     margin: 0 auto;
 }
 
+div.logout_button[b-t1re1saon9]
+{
+    text-align: right;
+    align-items: end;
+    align-self: center;
+    margin: 0 auto;
+    text-align: right; 
+    width: 100%;
+}
 
 div.button_login[b-t1re1saon9] {
     text-align: right;
@@ -14,7 +23,10 @@ div.button_login[b-t1re1saon9] {
     margin: auto;
 }
 
-div.page[b-t1re1saon9]
-{
-    background-image: url("/paperpage");
+div.database_status[b-t1re1saon9] {
+    position:fixed; 
+    width:100%; 
+    height:70px; 
+    padding:5px; 
+    bottom:0px;
 }

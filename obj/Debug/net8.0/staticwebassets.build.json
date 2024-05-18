@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "3DqBFDIt1ciR7xoWO+3VZ8W7M8ku/jGxJauh/Sisj78=",
+  "Hash": "Arj7hT2FK3jEq94wmzEMEWRdIs8A6sSUWqWP3HOM1ts=",
   "Source": "ProjektZaliczeniowyPR3",
   "BasePath": "_content/ProjektZaliczeniowyPR3",
   "Mode": "Default",
@@ -207,6 +207,25 @@
       "OriginalItemSpec": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\obj\\Debug\\net8.0\\scopedcss\\projectbundle\\ProjektZaliczeniowyPR3.bundle.scp.css"
     },
     {
+      "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\1paperpage.jpg",
+      "SourceId": "ProjektZaliczeniowyPR3",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\",
+      "BasePath": "_content/ProjektZaliczeniowyPR3",
+      "RelativePath": "1paperpage.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\1paperpage.jpg"
+    },
+    {
       "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\app.css",
       "SourceId": "ProjektZaliczeniowyPR3",
       "SourceType": "Discovered",
@@ -224,6 +243,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\app.css"
+    },
+    {
+      "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\bookside.jpg",
+      "SourceId": "ProjektZaliczeniowyPR3",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\",
+      "BasePath": "_content/ProjektZaliczeniowyPR3",
+      "RelativePath": "bookside.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\bookside.jpg"
     },
     {
       "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\bootstrap\\bootstrap.min.css",
@@ -264,6 +302,25 @@
       "OriginalItemSpec": "wwwroot\\bootstrap\\bootstrap.min.css.map"
     },
     {
+      "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\dololo.jpg",
+      "SourceId": "ProjektZaliczeniowyPR3",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\",
+      "BasePath": "_content/ProjektZaliczeniowyPR3",
+      "RelativePath": "dololo.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\dololo.jpg"
+    },
+    {
       "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\favicon.png",
       "SourceId": "ProjektZaliczeniowyPR3",
       "SourceType": "Discovered",
@@ -283,12 +340,12 @@
       "OriginalItemSpec": "wwwroot\\favicon.png"
     },
     {
-      "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\paperpage.jpg",
+      "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\oldbookcover.jpg",
       "SourceId": "ProjektZaliczeniowyPR3",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\",
       "BasePath": "_content/ProjektZaliczeniowyPR3",
-      "RelativePath": "paperpage.jpg",
+      "RelativePath": "oldbookcover.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -299,7 +356,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\paperpage.jpg"
+      "OriginalItemSpec": "wwwroot\\oldbookcover.jpg"
     }
   ]
 }
