@@ -4,6 +4,8 @@
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 @using ProjektZaliczeniowyPR3.Models
 
+<PageTitle>Nowe konto</PageTitle>
+
 <h1>Nowe konto</h1><br/>
 <br/>
 <p>Nazwa użytkownika</p>
@@ -62,6 +64,7 @@ else {
         User newUser = new();
         newUser.Username = username;
         newUser.SetPassword(password);
+        newUser.isAdmin = isAdmin;
 
         using (var db = new LibraryContext())
         {

@@ -14,8 +14,8 @@ public class LibraryContext : DbContext
     {
         ConnectionInfo info = new();
 
-        string connectionInfo = "Host=localhost:5432;Database=postgres;Username=postgres;Password=1234";
-        //await info.RetrieveConnectionString();
+        //string connectionInfo = "Host=localhost:5432;Database=postgres;Username=postgres;Password=1234";
+        string connectionInfo = info.RetrieveConnectionString();
 
         optionsBuilder.UseNpgsql(connectionInfo);
     }

@@ -2,9 +2,10 @@
 @using Microsoft.Data.SqlClient
 @using ProjektZaliczeniowyPR3.Models
 @using ProjektZaliczeniowyPR3.Data;
+@using ProjektZaliczeniowyPR3.DatabaseConnection
 @inject NavigationManager Navigator
 @using static Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions;
-
+<PageTitle>Zasoby bazy danych</PageTitle>
 <h1>Zasoby biblioteki</h1>
 @if (ifConnectionSuccessful)
 {
@@ -56,16 +57,19 @@
 
     protected override void OnInitialized()
     {
-
-        using (var db = new LibraryContext())
+        ConnectionInfo info = new();
+        if (info.TryConnection())
         {
-            if (db.Database.CanConnect())
+            using (var db = new LibraryContext())
             {
-                ifConnectionSuccessful = true;
+                if (db.Database.CanConnect())
+                {
+                    ifConnectionSuccessful = true;
+                }
+                _books = db.books
+                    .OrderBy(b => b.Title)
+                    .ToList();
             }
-            _books = db.books
-                .OrderBy(b => b.Title)
-                .ToList();
         }
     }
 

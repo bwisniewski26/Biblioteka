@@ -5,8 +5,11 @@
 @inject NavigationManager Navigator
 @page "/account"
 
+<PageTitle>Panel użytkownika</PageTitle>
+
 @if (!isLoggedIn)
 {
+    <h1>Logowanie</h1>
     <div class = "login_prompt">
         <p>Nazwa użytkownika</p> 
         <input @bind = "username">
@@ -15,11 +18,14 @@
         <input @bind = "password">
         <br/>
         <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Zaloguj się</button>
+        <p>Nie masz konta? <a href="/register">Zarejestruj się!</a></p>
+        <p>@response</p>
     </div>
 
 }
 else
 {
+    <h1>Panel użytkownika</h1>
     <button Color="ButtonColor.Primary" @onclick = "ChangeAdmin">Zmień się w admina</button>
     <p>Zalogowano!</p>
     <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Wyloguj się</button>
@@ -50,11 +56,44 @@ else
         private bool isAdmin = false;
 
 
-        string username = "", password = "", title = "", author = "", desc = "";
+        string username = "", password = "", title = "", author = "", desc = "", response = "";
 
         private void LogIn()
         {
-            isLoggedIn = !isLoggedIn;
+            List<User> users = new();
+            using (var db = new LibraryContext())
+                {
+                    try {
+                        db.Database.CanConnect();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    finally {}
+                    Console.WriteLine("Polaczenie sie udalo :3");
+                    users = db.users
+                    .ToList();
+            }
+            
+            foreach(var login in users)
+            {
+                if (login.Username == username)
+                {
+                    if (login.Password == password)
+                    {
+                        isAdmin = login.isAdmin;
+                        isLoggedIn = true;
+                        ShowMessage(ToastType.Success);
+                    }
+                    else
+                    {
+                        response = "Niepoprawne hasło!";
+                    }
+                }
+            }
+
+            
         }
 
         private void ChangeAdmin()

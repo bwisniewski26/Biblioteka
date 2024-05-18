@@ -71,7 +71,9 @@ public class ConnectionInfo {
 
     public bool TryConnection()
     {
-        if (_host == "file not found")
+        string connectionInfo = RetrieveConnectionString();
+
+        if (connectionInfo == "File does not exit")
         {
             return false;
         }
@@ -86,9 +88,9 @@ public class ConnectionInfo {
 
     }
 
-    public async Task<string> RetrieveConnectionString()
+    public string RetrieveConnectionString()
     {
-        string json = await this.ReadFromFile();
+        string json = ReadFromFile();
         if (json == "File does not exist")
         {
             return "File does not exist";
@@ -107,7 +109,7 @@ public class ConnectionInfo {
         PrepareToSave();
     }
 
-    public async Task<string> ReadFromFile()
+    public string ReadFromFile()
     {
         string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Desktop), "library_database.json");
         string json = "";
@@ -115,20 +117,14 @@ public class ConnectionInfo {
         {
             using (StreamReader outputFile = new StreamReader(path))
             {
-                json = await outputFile.ReadToEndAsync();
+                json = outputFile.ReadToEnd();
             }
 
             return json;
         }
         else 
         {
-            WriteDefault();
-            await ReadFromFile();
-        }
-        _host = "file not found";
-        return await Task.Factory.StartNew(() => {
             return "File does not exist";
-        });
-
+        }
     }
 }

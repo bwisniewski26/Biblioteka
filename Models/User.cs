@@ -6,13 +6,13 @@ public class User
     public string Username { get; set;} = null!;
     public string Password { get; set; } = null!;
 
-    bool isAdmin = false;
-
-    public ICollection<Book> _books { get; set;} = null!;
+    public bool isAdmin { get; set;} = false;
+ 
+    public ICollection<Book> Books { get; set;} = null!;
  
     public User()
     {}
-    public User(string username, string password, bool isadmin = false) {
+    public User(string username, string password, bool isadmin) {
         Username = username;
         Password = password;
         isAdmin = isadmin;
