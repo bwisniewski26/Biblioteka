@@ -21,6 +21,10 @@
       "PackagePath": "staticwebassets\\favicon.png"
     },
     {
+      "Id": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\paperpage.jpg",
+      "PackagePath": "staticwebassets\\paperpage.jpg"
+    },
+    {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.ProjektZaliczeniowyPR3.Microsoft.AspNetCore.StaticWebAssets.props",
       "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
     },

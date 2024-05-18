@@ -13,7 +13,11 @@
         </div>
 
         <article class="content px-4">
-            <div class="py-2">@Body</div>
+            <div class="py-2">
+                <div class = "page">
+                    @Body
+                </div>
+            </div>
         </article>
     </main>
 
@@ -37,7 +41,9 @@
                    {
                        new NavItem { Id = "1", Href = "/", IconName = IconName.HouseDoorFill, Text = "Strona główna", Match=NavLinkMatch.All},
                        new NavItem { Id = "2", Href = "/browse", IconName = IconName.List, Text = "Zasoby biblioteki"},
-                       new NavItem { Id = "3", Href = "/account", IconName = IconName.UsbC, Text = "Użytkownik"},
+                       new NavItem { Id = "3", Href = "/database_settings", IconName = IconName.DatabaseExclamation, Text = "Ustawienia bazy danych"},
+                       new NavItem { Id = "4", Href = "/account", IconName = IconName.PersonBoundingBox, Text = "Zaloguj się"},
+                       new NavItem { Id = "5", Href = "/register", IconName = IconName.PersonAdd, Text = "Zarejestruj się"}
                    };
 
         return navItems;

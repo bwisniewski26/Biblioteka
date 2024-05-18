@@ -6,7 +6,8 @@
 @using static Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions;
 
 <h1>Zasoby biblioteki</h1>
-
+@if (ifConnectionSuccessful)
+{
 <div class = "table">
     <table>
         <thead>
@@ -18,20 +19,36 @@
         <tbody>
             @foreach (var book in _books)
             {
-            <td style = "book_title">@book.Title</td>
-            <td>@book.Author</td>
-            <td>@book.Description</td>
+                <tr>
+                    <td style = "book_title">@book.Title</td>
+                    <td>@book.Author</td>
+                    <td>Dostępna</td>
+                    <td>@book.Description</td>
+                </tr>
             }
 
         </tbody>
     </table>
 </div>
-
-
 <button @onclick = "ClearTable">Wyczyść dane</button>
+}
+
+<div class = "database_status">
+    <p>Status połączenia z bazą danych:</p>
+    @if (!ifConnectionSuccessful)
+    {
+        <p style = "color: red">Brak połączenia!</p>
+        <button>Zaktualizuj ustawienia</button>
+    }
+    else
+    {
+        <p style = "color: green">Połączono pomyślnie</p>
+    }
+</div>
 
 @code {
 
+    bool ifConnectionSuccessful = false;
     [Parameter] public bool isLoggedIn { get; set; } = false;
     [Parameter] public bool isAdmin { get; set; } = false;
 
@@ -39,9 +56,14 @@
 
     protected override void OnInitialized()
     {
+
         using (var db = new LibraryContext())
         {
-            _books = db.Books
+            if (db.Database.CanConnect())
+            {
+                ifConnectionSuccessful = true;
+            }
+            _books = db.books
                 .OrderBy(b => b.Title)
                 .ToList();
         }

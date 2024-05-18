@@ -1,16 +1,9 @@
-table {
-    border: 0.1rem solid;
+div.database_input {
     width: 100%;
+    align-items: center;
     text-align: center;
-}
-
-th, td {
-    line-height: 2rem;
-}
-
-td.book_title {
-    font-weight: bold;
-    
+    align-self: center;
+    margin: 0 auto;
 }
 
 div.database_status {

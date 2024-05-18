@@ -152,3 +152,6 @@ C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniow
 C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Pages\Home.razor.rz.scp.css
 C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Pages\About.razor.rz.scp.css
+C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Layout\MainLayout.razor.rz.scp.css
+C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Pages\Register.razor.rz.scp.css
+C:\Users\Bartek\Desktop\Programowanie3\ProjektZaliczeniowyPR3\ProjektZaliczeniowyPR3\obj\Debug\net8.0\scopedcss\Components\Pages\DatabaseConnection.razor.rz.scp.css

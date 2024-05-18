@@ -1,0 +1,67 @@
+@page "/database_settings"
+
+@using ProjektZaliczeniowyPR3.DatabaseConnection
+@using ProjektZaliczeniowyPR3.Data
+@using System.Text.Json
+<PageTitle>Ustawienia bazy danych</PageTitle>
+<h1>Ustawienia bazy danych</h1>
+<br/>
+<div class = "database_input">
+    <p>Nazwa hosta</p>
+    <input @bind = "info._host">
+    <br/>
+    <p>Port hosta</p>
+    <input @bind = "info._port">
+    <br/>
+    <p>Nazwa użytkownika bazy danych</p>
+    <input @bind = "info._username">
+    <br/>
+    <p>Hasło użytkownika</p>
+    <input @bind = "info._password">
+    <br/>
+    <p>Nazwa bazy danych</p>
+    <input @bind = "info._database">
+
+    <br/>
+    <button @onclick = "SaveInput">Zapisz do pliku</button>
+</div>
+
+<p>@response</p>
+
+<br/><br/>
+<div class = "database_status">
+    <p>Status połączenia z bazą danych:</p>
+    @if (!ifConnectionSuccessful)
+    {
+        <p style = "color: red">Brak połączenia z bazą danych!</p>
+    }
+    else
+    {
+        <p style = "color: green">Pomyślnie połączono z bazą danych</p>
+    }
+</div>
+
+@code
+{
+    ConnectionInfo info = new();
+
+    string response = "";
+    bool ifConnectionSuccessful = false;
+
+    protected override void OnInitialized()
+    {
+        ifConnectionSuccessful = info.TryConnection();
+    }
+
+    protected void SaveInput() 
+    {
+        Console.WriteLine(info._username + " host:" + info._host);
+        
+        if (info.PrepareToSave() == "Save successful")
+        {
+            response = "Zapisano pomyślnie. Próba połączenia!";
+            ifConnectionSuccessful = info.TryConnection();
+        }
+    }
+
+}

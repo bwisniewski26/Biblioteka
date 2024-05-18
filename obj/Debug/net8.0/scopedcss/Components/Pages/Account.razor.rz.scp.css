@@ -4,3 +4,8 @@ div.button_login[b-t1re1saon9] {
     align-items: end;
     margin: auto;
 }
+
+div.page[b-t1re1saon9]
+{
+    background-image: url("/paperpage");
+}

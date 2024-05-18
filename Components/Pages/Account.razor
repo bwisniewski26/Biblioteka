@@ -8,13 +8,13 @@
 @if (!isLoggedIn)
 {
     <div class = "login_prompt">
-        <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Zaloguj się</button>
         <p>Nazwa użytkownika</p> 
         <input @bind = "username">
         <br/>
         <p>Hasło</p>
         <input @bind = "password">
         <br/>
+        <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Zaloguj się</button>
     </div>
 
 }
@@ -42,6 +42,7 @@ else
         <p>Wypożycz książki</p>
     }
 }
+
 
 @code {
         List<ToastMessage> messages = new List<ToastMessage>();
@@ -81,7 +82,7 @@ else
                         Console.WriteLine(e.Message);
                     }
                     finally {}
-                    db.Books.Add(ksiazka);
+                    db.books.Add(ksiazka);
                     db.SaveChanges();
                 }
             }

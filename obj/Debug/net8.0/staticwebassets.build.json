@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "OxEdaroALVJdkxwam72t3LPXvecZLf4JWCATZxPhB/I=",
+  "Hash": "3DqBFDIt1ciR7xoWO+3VZ8W7M8ku/jGxJauh/Sisj78=",
   "Source": "ProjektZaliczeniowyPR3",
   "BasePath": "_content/ProjektZaliczeniowyPR3",
   "Mode": "Default",
@@ -281,6 +281,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.png"
+    },
+    {
+      "Identity": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\paperpage.jpg",
+      "SourceId": "ProjektZaliczeniowyPR3",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Bartek\\Desktop\\Programowanie3\\ProjektZaliczeniowyPR3\\ProjektZaliczeniowyPR3\\wwwroot\\",
+      "BasePath": "_content/ProjektZaliczeniowyPR3",
+      "RelativePath": "paperpage.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\paperpage.jpg"
     }
   ]
 }

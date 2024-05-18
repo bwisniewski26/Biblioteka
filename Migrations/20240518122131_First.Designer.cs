@@ -11,8 +11,8 @@ using ProjektZaliczeniowyPR3.Data;
 namespace ProjektZaliczeniowyPR3.Migrations
 {
     [DbContext(typeof(LibraryContext))]
-    [Migration("20240517132536_SecondMigration")]
-    partial class SecondMigration
+    [Migration("20240518122131_First")]
+    partial class First
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -46,11 +46,14 @@ namespace ProjektZaliczeniowyPR3.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("isAvailable")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Books");
+                    b.ToTable("books");
                 });
 
             modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.User", b =>
@@ -61,13 +64,17 @@ namespace ProjektZaliczeniowyPR3.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.Book", b =>

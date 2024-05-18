@@ -1,0 +1,81 @@
+@page "/register"
+
+@using ProjektZaliczeniowyPR3.Data
+@using ProjektZaliczeniowyPR3.DatabaseConnection
+@using ProjektZaliczeniowyPR3.Models
+
+<h1>Nowe konto</h1><br/>
+<br/>
+<p>Nazwa użytkownika</p>
+<input @bind = "username">
+
+<br/>
+<p>Hasło</p>
+<input @bind = "password">
+
+<Switch @ref="adminSwitch" @bind-Value="isAdmin" Label="Czy użytkownik jest administratorem?" />
+@if (username.Length == 0 || password.Length == 0)
+{
+<div class = "error_message" style = "color: red;">
+    @errorMessage
+</div>
+}
+else {
+<div class = "register_button">
+    <button @onclick = "AddUser">Zarejestruj</button>
+</div>
+}
+
+
+<div class = "database_status">
+    <p>Status połączenia z bazą danych:</p>
+    @if (!ifConnectionSuccessful)
+    {
+        <p style = "color: red">Brak połączenia z bazą danych!</p>
+    }
+    else
+    {
+        <p style = "color: green">Pomyślnie połączono z bazą danych</p>
+    }
+</div>
+
+@code {
+
+    string username = "", password = "";
+    private Switch adminSwitch = default!;
+    private bool isAdmin = false, ifConnectionSuccessful = false;
+
+    private void Disable() => adminSwitch.Disable();
+
+    private void Enable() => adminSwitch.Enable();
+    string errorMessage = "Nie podano informacji!";
+
+    protected override void OnInitialized()
+    {
+        ConnectionInfo info = new();
+        ifConnectionSuccessful = info.TryConnection();
+    }
+
+
+    protected void AddUser()
+    {
+        User newUser = new();
+        newUser.Username = username;
+        newUser.SetPassword(password);
+
+        using (var db = new LibraryContext())
+        {
+            try {
+                db.Database.CanConnect();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally {}
+            db.users.Add(newUser);
+            db.SaveChanges();
+        }
+
+    }
+}

@@ -4,7 +4,7 @@ public class User
 {
     public int Id { get; set; }
     public string Username { get; set;} = null!;
-    private string Password { get; set; } = null!;
+    public string Password { get; set; } = null!;
 
     bool isAdmin = false;
 
@@ -16,6 +16,11 @@ public class User
         Username = username;
         Password = password;
         isAdmin = isadmin;
+    }
+
+    public void SetPassword(string newPassword)
+    {
+        Password = newPassword;
     }
 
 }

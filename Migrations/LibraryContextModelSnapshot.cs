@@ -21,7 +21,7 @@ namespace ProjektZaliczeniowyPR3.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.book", b =>
+            modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.Book", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,6 +43,9 @@ namespace ProjektZaliczeniowyPR3.Migrations
                     b.Property<int?>("UserId")
                         .HasColumnType("integer");
 
+                    b.Property<bool>("isAvailable")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("UserId");
@@ -58,13 +61,17 @@ namespace ProjektZaliczeniowyPR3.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("Username")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("users");
                 });
 
             modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.Book", b =>

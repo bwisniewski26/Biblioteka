@@ -17,6 +17,7 @@ Możesz swobodnie przeglądać nasze zasoby. W celu wypożyczenia wybranej ksią
     @if (!ifConnectionSuccessful)
     {
         <p style = "color: red">Brak połączenia!</p>
+        <button>Zaktualizuj ustawienia</button>
     }
     else
     {
@@ -24,14 +25,16 @@ Możesz swobodnie przeglądać nasze zasoby. W celu wypożyczenia wybranej ksią
     }
 </div>
 
-
 @code
 {
     bool ifConnectionSuccessful = false;
+    ConnectionInfo info = new();
+
+    LibraryContext context = new();
 
     protected override void OnInitialized()
     {
-
+        ifConnectionSuccessful = info.TryConnection();
     }
 
 }
