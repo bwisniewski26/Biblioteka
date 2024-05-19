@@ -32,6 +32,10 @@
     {
         @errorMessages[1]
     }
+    @if (userExists)
+    {
+        @errorMessages[2]
+    }
 </div>
 }
 
@@ -52,13 +56,17 @@
 
     string username = "", password = "";
     private Switch adminSwitch = default!;
+
+    private Hashing hash = new();
     private bool isAdmin = false, ifConnectionSuccessful = false, displayErrorMessages = false;
 
     private void Disable() => adminSwitch.Disable();
 
     private void Enable() => adminSwitch.Enable();
 
-    string[] errorMessages = ["Nie podano loginu!", "Nie podano hasła!"];
+    bool userExists = false;
+
+    string[] errorMessages = ["Nie podano loginu!", "Nie podano hasła!", "Użytkownik istnieje!"];
 
     protected override void OnInitialized()
     {
@@ -76,9 +84,33 @@
         }
         User newUser = new();
         newUser.Username = username;
-        newUser.SetPassword(password);
+        newUser.Password = password;
+        newUser.salt = hash.GetSalt();
+        newUser.Password = hash.GetHash(password, newUser.salt);
         newUser.isAdmin = isAdmin;
-
+        List <User> users;
+        using (var db = new LibraryContext())
+        {
+            try {
+                db.Database.CanConnect();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            finally {}
+            users = db.users
+            .ToList();
+        }
+        foreach (var user in users)
+        {
+            if (user.Username == username)
+            {
+                userExists = true;
+                return;
+            }
+        }
+        userExists = false;
         using (var db = new LibraryContext())
         {
             try {
@@ -93,7 +125,9 @@
             db.SaveChanges();
         }
 
-        Navigator.NavigateTo("/account");
+        this.StateHasChanged();
+
+        //Navigator.NavigateTo("/account");
 
     }
 }

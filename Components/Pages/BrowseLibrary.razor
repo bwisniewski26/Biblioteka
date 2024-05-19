@@ -44,8 +44,6 @@
 }
 else
 {
-    <p>ID: @id</p>
-    <p>ID Usera: @UserId</p>
     <div class = "table">
         <table>
             <thead>
@@ -70,7 +68,7 @@ else
                             <td>Niedostępna</td>
                         }
                         <td>@book.Description</td>
-                        <button id="@book.Id" @onclick = "() => RentBook(book.Id)" disabled = "@(!book.isAvailable)">@IconName.Cake</button>
+                        <button id="@book.Id" @onclick = "() => RentBook(book.Id)" disabled = "@(!book.isAvailable)"><Icon Name = "IconName.BookFill"></Icon></button>
                     </tr>
                 }
 
@@ -137,14 +135,19 @@ else
                 book.UserId = UserId;
                 db.Entry(book).State = EntityState.Modified;
                 db.SaveChanges();
+
                 user = db.users
                 .Single(user => user.Id == UserId);
 
                 user.Books.Add(book);
+
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
+
+                
             }
             
         }
+        Navigator.NavigateTo("/refresh/" + UserId.ToString());
     }
 }    

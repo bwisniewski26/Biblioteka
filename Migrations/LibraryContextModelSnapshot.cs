@@ -72,6 +72,10 @@ namespace ProjektZaliczeniowyPR3.Migrations
                     b.Property<bool>("isAdmin")
                         .HasColumnType("boolean");
 
+                    b.Property<byte[]>("salt")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
                     b.HasKey("Id");
 
                     b.ToTable("users");

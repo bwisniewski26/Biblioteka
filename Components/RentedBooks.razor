@@ -1,4 +1,7 @@
+@using Microsoft.EntityFrameworkCore
 @using ProjektZaliczeniowyPR3.Components
+
+@inject NavigationManager Navigator
 
 <h2>Wypożyczone książki</h2>
 
@@ -10,6 +13,7 @@
                 <th>Tytuł</th>
                 <th>Autor</th>
                 <th>Opis</th>
+                <th>Zwróć książkę</th>
             </thead>
             <tbody>
                 @if (_books is not null)
@@ -20,6 +24,7 @@
                             <td style = "book_title">@book.Title</td>
                             <td>@book.Author</td>
                             <td>@book.Description</td>
+                            <td><button @onclick = "() => ReturnBook(book.Id)"> <Icon Name = "IconName.BookmarkDashFill"></Icon> </button> </td>
                         </tr>
                     }
                 }
@@ -49,5 +54,31 @@
                     .ToList();
             }
         }
+    }
+
+    protected void ReturnBook(int id)
+    {
+        if (ifConnectionSuccessful)
+        {
+            using (var db = new LibraryContext())
+            {
+                Book book = new();
+                User user = new();
+                    book = db.books
+                    .Single(book => book.Id == id);
+                    book.isAvailable = true;
+                    book.UserId = UserId;
+                    db.Entry(book).State = EntityState.Modified;
+                    db.SaveChanges();
+                    user = db.users
+                    .Single(user => user.Id == UserId);
+
+                    user.Books.Remove(book);
+                    db.Entry(user).State = EntityState.Modified;
+                    db.SaveChanges();
+
+            }
+        }
+        Navigator.NavigateTo("/refresh/" + UserId.ToString());
     }
 }

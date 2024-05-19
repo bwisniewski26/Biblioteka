@@ -23,6 +23,14 @@ a[b-wz8hpxp6ik]
 div.h1[b-z5u6rjc3ts] {
     font-size: 42px;
 }
+
+div.footer[b-z5u6rjc3ts] {
+    position:fixed; 
+    width:100%; 
+    height:70px; 
+    padding:5px; 
+    bottom:0px;
+}
 /* _content/ProjektZaliczeniowyPR3/Components/Pages/Account.razor.rz.scp.css */
 div.login_prompt[b-t1re1saon9] 
 {
