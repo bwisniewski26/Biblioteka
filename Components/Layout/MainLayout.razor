@@ -8,9 +8,10 @@
              DataProvider="SidebarDataProvider" />
 
     <main class = "page">
-        <div class="bb-top-row px-4 d-flex justify-content-end">
+        <div class="bb-top-row px-4 d-flex justify-content-between">
+            <Icon Name="IconName.List" role="button" @onclick="ToggleSidebar" />
             <div class = "about_link">
-                <a href="/about">O projekcie</a>
+                <a href="/about"><b>O projekcie</b></a>
             </div>
         </div>
             <article class="content px-4">
@@ -25,7 +26,7 @@
 @code {
     Sidebar? sidebar;
     IEnumerable<NavItem>? navItems;
-
+        
     private async Task<SidebarDataProviderResult> SidebarDataProvider(SidebarDataProviderRequest request)
     {
         if (navItems is null)
@@ -39,13 +40,41 @@
         navItems = new List<NavItem>
                    {
                        new NavItem { Id = "1", Href = "/", IconName = IconName.HouseDoorFill, Text = "Strona główna", Match=NavLinkMatch.All},
-                       new NavItem { Id = "2", Href = "/browse", IconName = IconName.List, Text = "Zasoby biblioteki"},
-                       new NavItem { Id = "3", Href = "/database_settings", IconName = IconName.DatabaseExclamation, Text = "Ustawienia bazy danych"},
-                       new NavItem { Id = "4", Href = "/account", IconName = IconName.PersonBoundingBox, Text = "Zaloguj się"},
-                       new NavItem { Id = "5", Href = "/register", IconName = IconName.PersonAdd, Text = "Zarejestruj się"}
+                       new NavItem { Id = "2", Href = "/database_settings", IconName = IconName.DatabaseFill, Text = "Ustawienia bazy danych"},
+                       new NavItem { Id = "3", IconName = IconName.Person, Text = "Użytkownik"},
+                       new NavItem { Id = "4", Href = "/account", IconName = IconName.PersonFillCheck, Text = "Zaloguj się", ParentId = "3"},
+                       new NavItem { Id = "5", Href = "/register", IconName = IconName.PersonFillAdd, Text = "Zarejestruj się", ParentId = "3"}
                    };
 
         return navItems;
     }
+
+
+    private void ToggleSidebar() => sidebar.ToggleSidebar();
 }
 
+<style>
+    :root 
+    {
+        --bb-sidebar-width: 270px;
+        --bb-sidebar-collapsed-width: 50px;
+        --bb-sidebar-background-color: rgba(234, 234, 234, 1);
+        --bb-sidebar-top-row-background-color: rgb(202, 132, 75);
+        --bb-sidebar-top-row-border-color: rgb(194,192,192);
+        --bb-sidebar-title-text-color: rgb(0,0,0);
+        --bb-sidebar-brand-icon-color: rgb(80, 3, 3);
+        --bb-sidebar-brand-image-width: 36px;
+        --bb-sidebar-brand-image-height: 36px;
+        --bb-sidebar-title-badge-text-color: rgb(255,255,255);
+        --bb-sidebar-title-badge-background-color: rgba(25,135,84,var(--bs-bg-opacity,1));
+        --bb-sidebar-navbar-toggler-icon-color: rgb(0,0,0);
+        --bb-sidebar-navbar-toggler-background-color: rgb(255, 255, 255);
+        --bb-sidebar-content-border-color: rgb(194,192,192);
+        --bb-sidebar-nav-item-text-color: rgba(0,0,0,0.9);
+        --bb-sidebar-nav-item-text-active-color-rgb: 0,0,0;
+        --bb-sidebar-nav-item-text-hover-color: rgba(var(--bb-sidebar-nav-item-text-active-color-rgb),0.9);
+        --bb-sidebar-nav-item-text-active-color: rgba(var(--bb-sidebar-nav-item-text-active-color-rgb),0.9);
+        --bb-sidebar-nav-item-background-hover-color: rgba(var(--bb-sidebar-nav-item-text-active-color-rgb),0.08);
+        --bb-sidebar-nav-item-group-background-color: rgba(var(--bb-sidebar-nav-item-text-active-color-rgb),0.08);
+    }
+</style>

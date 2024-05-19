@@ -85,7 +85,7 @@
                     .Single(user => user.Id == UserId);
                     newLog.Username = admin.Username;
                     newLog.IsUserAdmin = admin.isAdmin;
-                    newLog.OperationsType = Logs.OperationType.BookReturn;
+                    newLog.OperationsType = Logs.OperationType.BookDelete;
 
                     db.logs.Add(newLog);
 

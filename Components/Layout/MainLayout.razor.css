@@ -7,7 +7,7 @@ main.page {
 
 div.bb-top-row
 {
-    background-color: gray;
+    background-color: rgb(202, 132, 75);
 }
 
 a
@@ -18,3 +18,5 @@ a
 .sidebar {
     background-color: red;
 }
+
+

@@ -15,7 +15,7 @@
     <br/>
     <p>Hasło</p>
     <input @bind = "password">
-    <Switch @ref="adminSwitch" @bind-Value="isAdmin" Label="Czy użytkownik jest administratorem?"/>
+    <p>Czy użytkonwnik jest administratorem? <input type = "checkbox" @bind = "isAdmin"></p>
     <div class = "register_button">
         <button @onclick = "AddUser">Zarejestruj</button>
     </div>
@@ -55,16 +55,10 @@
 @code {
 
     string username = "", password = "";
-    private Switch adminSwitch = default!;
-
     private Hashing hash = new();
     private bool isAdmin = false, ifConnectionSuccessful = false, displayErrorMessages = false;
-
-    private void Disable() => adminSwitch.Disable();
-
-    private void Enable() => adminSwitch.Enable();
-
     bool userExists = false;
+    List<ToastMessage> messages = new List<ToastMessage>();
 
     string[] errorMessages = ["Nie podano loginu!", "Nie podano hasła!", "Użytkownik istnieje!"];
 
@@ -107,7 +101,9 @@
         {
             if (user.Username == username)
             {
+                displayErrorMessages = true;
                 userExists = true;
+                StateHasChanged();
                 return;
             }
         }
@@ -129,10 +125,22 @@
             db.logs.Add(newLog);
             db.SaveChanges();
         }
-
-        this.StateHasChanged();
-
-        //Navigator.NavigateTo("/account");
-
+        Navigator.NavigateTo("/account");
     }
+        private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
+
+        private ToastMessage CreateToastMessage(ToastType toastType)
+        {
+            var toastMessage = new ToastMessage();
+
+            toastMessage.Type = toastType;
+            toastMessage.Title = "Zarejestrowano pomyślnie!";
+            toastMessage.Message = "Możesz zalogować się teraz przy użyciu podanych danych";
+            toastMessage.AutoHide = !(toastType == ToastType.Danger || toastType == ToastType.Warning);
+
+            return toastMessage;
+        }
+
+
 }
+

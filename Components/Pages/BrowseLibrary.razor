@@ -1,4 +1,3 @@
-@page "/browse"
 @using Microsoft.Data.SqlClient
 @using Microsoft.EntityFrameworkCore
 @using ProjektZaliczeniowyPR3.Models
@@ -6,8 +5,7 @@
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 @inject NavigationManager Navigator
 @using static Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions;
-<PageTitle>Zasoby bazy danych</PageTitle>
-<h2>Zasoby biblioteki</h2>
+<h3>Zasoby biblioteki</h3>
 @if (ifConnectionSuccessful)
 {
 @if (!isLoggedIn)
@@ -49,8 +47,8 @@ else
             <thead>
                 <th>Tytuł</th>
                 <th>Autor</th>
-                <th>Dostępność</th>
                 <th>Opis</th>
+                <th>Dostępność</th>
                 <th>Wypożycz</th>
             </thead>
             <tbody>
@@ -59,6 +57,7 @@ else
                     <tr>
                         <td style = "book_title">@book.Title</td>
                         <td>@book.Author</td>
+                        <td>@book.Description</td>
                         @if (book.isAvailable)
                         {
                             <td>Dostępna</td>
@@ -67,7 +66,6 @@ else
                         {
                             <td>Niedostępna</td>
                         }
-                        <td>@book.Description</td>
                         <button id="@book.Id" @onclick = "() => RentBook(book.Id)" disabled = "@(!book.isAvailable)"><Icon Name = "IconName.BookFill"></Icon></button>
                     </tr>
                 }
@@ -78,20 +76,7 @@ else
 }
 
 }
-@if (showDatabaseInfo)
-{
-    <div class = "database_status">
-        <p>Status połączenia z bazą danych:</p>
-        @if (!ifConnectionSuccessful)
-        {
-            <p style = "color: red"><b>Brak połączenia z bazą danych!</b></p>
-        }
-        else
-        {
-            <p style = "color: green"><b>Połączono pomyślnie</b></p>
-        }
-    </div>
-}
+
 
 @code {
 
@@ -161,3 +146,4 @@ else
         Navigator.NavigateTo("/refresh/" + UserId.ToString());
     }
 }    
+

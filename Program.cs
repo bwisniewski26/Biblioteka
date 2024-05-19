@@ -31,4 +31,6 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
+app.UseStatusCodePagesWithRedirects("/404");
+
 app.Run();

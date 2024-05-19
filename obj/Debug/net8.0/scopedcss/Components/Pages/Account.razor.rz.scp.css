@@ -24,8 +24,13 @@ div.button_login[b-t1re1saon9] {
 }
 
 div.database_status[b-t1re1saon9] { 
+    position: fixed;
     width:100%; 
     height:70px; 
     padding:5px; 
     bottom:0px;
+}
+
+input[b-t1re1saon9] {
+    background-image: url("/dololo.jpg");
 }

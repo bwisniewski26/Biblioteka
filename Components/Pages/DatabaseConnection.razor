@@ -3,24 +3,27 @@
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 @using ProjektZaliczeniowyPR3.Data
 @using System.Text.Json
+
+@inject NavigationManager Navigator
+
 <PageTitle>Ustawienia bazy danych</PageTitle>
 <h1>Ustawienia bazy danych</h1>
 <br/>
 <div class = "database_input">
     <p>Nazwa hosta</p>
-    <input @bind = "info._host">
+    <input @bind = "input._host">
     <br/>
     <p>Port hosta</p>
-    <input @bind = "info._port">
+    <input @bind = "input._port">
     <br/>
     <p>Nazwa użytkownika bazy danych</p>
-    <input @bind = "info._username">
+    <input @bind = "input._username">
     <br/>
     <p>Hasło użytkownika</p>
-    <input @bind = "info._password">
+    <input @bind = "input._password">
     <br/>
     <p>Nazwa bazy danych</p>
-    <input @bind = "info._database">
+    <input @bind = "input._database">
 
     <br/>
     <button @onclick = "SaveInput">Zapisz do pliku</button>
@@ -44,6 +47,7 @@
 @code
 {
     ConnectionInfo info = new();
+    ConnectionInfo input = new();
 
     string response = "";
     bool ifConnectionSuccessful = false;
@@ -55,12 +59,13 @@
 
     protected void SaveInput() 
     {
-        Console.WriteLine(info._username + " host:" + info._host);
+        Console.WriteLine(input._username + " host:" + input._host);
         
-        if (info.PrepareToSave() == "Save successful")
+        if (input.PrepareToSave() == "Save successful")
         {
             response = "Zapisano pomyślnie. Próba połączenia!";
-            ifConnectionSuccessful = info.TryConnection();
+            ifConnectionSuccessful = input.TryConnection();
+            Navigator.NavigateTo("/database_settings");
         }
     }
 

@@ -14,6 +14,7 @@ td.book_title[b-17r6vhtn1u] {
 }
 
 div.database_status[b-17r6vhtn1u] {
+    position:fixed;
     width:100%; 
     height:70px; 
     padding:5px; 

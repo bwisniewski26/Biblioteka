@@ -13,3 +13,7 @@ div.database_status {
     padding:5px; 
     bottom:0px;
 }
+
+input {
+    background-image: url("/dololo.jpg");
+}

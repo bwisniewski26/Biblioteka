@@ -10,7 +10,7 @@ main.page[b-wz8hpxp6ik] {
 
 div.bb-top-row[b-wz8hpxp6ik]
 {
-    background-color: gray;
+    background-color: rgb(202, 132, 75);
 }
 
 a[b-wz8hpxp6ik]
@@ -21,6 +21,8 @@ a[b-wz8hpxp6ik]
 .sidebar[b-wz8hpxp6ik] {
     background-color: red;
 }
+
+
 /* _content/ProjektZaliczeniowyPR3/Components/Pages/About.razor.rz.scp.css */
 div.h1[b-z5u6rjc3ts] {
     font-size: 42px;
@@ -60,10 +62,15 @@ div.button_login[b-t1re1saon9] {
 }
 
 div.database_status[b-t1re1saon9] { 
+    position: fixed;
     width:100%; 
     height:70px; 
     padding:5px; 
     bottom:0px;
+}
+
+input[b-t1re1saon9] {
+    background-image: url("/dololo.jpg");
 }
 /* _content/ProjektZaliczeniowyPR3/Components/Pages/BrowseLibrary.razor.rz.scp.css */
 table[b-17r6vhtn1u] {
@@ -82,6 +89,7 @@ td.book_title[b-17r6vhtn1u] {
 }
 
 div.database_status[b-17r6vhtn1u] {
+    position:fixed;
     width:100%; 
     height:70px; 
     padding:5px; 
@@ -102,6 +110,10 @@ div.database_status[b-exb3zqx2js] {
     height:70px; 
     padding:5px; 
     bottom:0px;
+}
+
+input[b-exb3zqx2js] {
+    background-image: url("/dololo.jpg");
 }
 /* _content/ProjektZaliczeniowyPR3/Components/Pages/Home.razor.rz.scp.css */
 div.database_status[b-9ey9q3cay0] {
@@ -143,6 +155,22 @@ div.register_prompt[b-hm9y1g10b9]
 input[b-hm9y1g10b9] {
     background-image: url("/dololo.jpg");
     opacity: 70%;
+}
+/* _content/ProjektZaliczeniowyPR3/Components/Pages/_404.razor.rz.scp.css */
+div.errorMessage[b-e3c8kx7vja]
+{
+    font-size: 28px;
+    color: red;
+}
+/* _content/ProjektZaliczeniowyPR3/Components/RemoveBook.razor.rz.scp.css */
+table[b-voo166k5hd] {
+    border: 0.1rem solid;
+    width: 100%;
+    text-align: center;
+}
+
+th[b-voo166k5hd], td[b-voo166k5hd] {
+    line-height: 2rem;
 }
 /* _content/ProjektZaliczeniowyPR3/Components/RentedBooks.razor.rz.scp.css */
 table[b-etush2ols5] {

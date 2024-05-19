@@ -10,7 +10,7 @@ public class Logs
         BookRental,
         BookReturn,
         BookAdd,
-        BooksClar,
+        BooksClear,
         BookDelete,
         Default
     }
