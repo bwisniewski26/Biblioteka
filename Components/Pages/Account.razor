@@ -4,9 +4,10 @@
 @using ProjektZaliczeniowyPR3.Models
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject NavigationManager Navigator
+
 @page "/account"
-@page "/account/{userId}"
 
 <PageTitle>Panel użytkownika</PageTitle>
 <Toasts class="p-3" Messages="messages" Delay="1000" Placement="ToastsPlacement.TopRight" />
@@ -20,6 +21,7 @@
         <br/>
         <p>Hasło</p>
         <input @bind = "password">
+        <br/>
         <br/>
         <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Zaloguj się</button>
         <p>Nie masz konta? <a href="/register">Zarejestruj się!</a></p>
@@ -49,28 +51,37 @@ else
         <input @bind = "desc">
         <button @onclick = "AddBook">Zapisz</button>
         <br/>
-        <p><b>Aby wypożyczyć książkę kliknij na ikonę książki obok jej wpisu.</b></p>
         @if (loggedUser is not null)
         {
+            
+            <hr class="rounded">
+            <p><b>Aby wypożyczyć książkę kliknij na ikonę książki obok jej wpisu.</b></p>
             <BrowseLibrary isLoggedIn = "true" UserId="@loggedUser.Id" showDatabaseInfo = "false"></BrowseLibrary>
+            <hr class="rounded">
             <p><b>Aby zwrócić książkę kliknij na ikonę obok jej wpisu.</b></p>
             <RentedBooks UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RentedBooks>
+            <hr class="rounded">
             <p><b>Aby usunąć książkę kliknij na ikonę obok jej wpisu</b></p>
             <RemoveBook UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RemoveBook>
+            <button @onclick = "GoToManager">Menedżer kont</button>
+            <br/>
         }
         <button @onclick = "ClearTable">Usuń wszystkie książki</button>
         <br/>
         <button @onclick = "ClearUsersTable">Usuń wszystkich użytkowników</button>
+        <br/>
 
     }
     else
     {
-        <p>Aby wypożyczyć książkę kliknij na ikonę książki obok jej wpisu.</p>
         @if (loggedUser is not null)
         {
-           <BrowseLibrary isLoggedIn = "true" UserId="@loggedUser.Id"></BrowseLibrary>
-           <p><b>Aby zwrócić książkę kliknij na ikonę obok jej wpisu.</b></p>
-           <RentedBooks UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RentedBooks>
+            <hr class="rounded">
+            <p>Aby wypożyczyć książkę kliknij na ikonę książki obok jej wpisu.</p>
+            <BrowseLibrary isLoggedIn = "true" UserId="@loggedUser.Id"></BrowseLibrary>
+            <hr class="rounded">
+            <p><b>Aby zwrócić książkę kliknij na ikonę obok jej wpisu.</b></p>
+            <RentedBooks UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RentedBooks>
         }
     }
 }
@@ -91,7 +102,10 @@ else
 @code {
         List<ToastMessage> messages = new List<ToastMessage>();
 
-        User? loggedUser { get; set; } = new();
+        User loggedUser { get; set; } = new();
+        
+        User notLogged = new();
+        
         private bool isLoggedIn = false;
         private bool isAdmin = false;
         private bool ifConnectionSuccessful = false;
@@ -101,49 +115,55 @@ else
 
         [Parameter] public string userId { get; set; } = "";
 
+        public int Id {get; set;} = -1;
+
         string title = "", author = "", desc = "", response = "";
 
         private Hashing hash = new();
 
         protected override void OnInitialized()
         {
+            notLogged.Id = -1;
             ConnectionInfo info = new();
             ifConnectionSuccessful = info.TryConnection();
-            if (ifConnectionSuccessful && userId != "")
+        }
+
+        protected override async Task OnAfterRenderAsync(bool ifFirstRender)
+        {
+            if (ifFirstRender)
             {
-                int uId = Convert.ToInt32(userId);
-                User? user = new();
-                using (var db = new LibraryContext())
+                var result = await ProtectedSessionStore.GetAsync<int>("uId");
+                Id = result.Success ? result.Value : -1;
+                if (Id != -1)
                 {
-                    try {
-                        db.Database.CanConnect();
-                    }
-                    catch (Exception e)
+                    if (ifConnectionSuccessful)
                     {
-                        Console.WriteLine(e.Message);
+                        using (var db = new LibraryContext())
+                        {
+                            Console.WriteLine(userId);
+                            loggedUser = db.users
+                            .Single(loggedUser => loggedUser.Id == Id);
+                            isLoggedIn = true;
+                            isAdmin = loggedUser.isAdmin;
+                        }
+                        Console.WriteLine(loggedUser.Username);
                     }
-                    finally {}
-                    try 
-                    {
-                    user = db.users
-                    .Single(user => user.Id == uId);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                        user = null;
-                    }
-                }
-                if (user is not null)
-                {
-                    loggedUser = user;
-                    isAdmin = user.isAdmin;
-                    isLoggedIn = true;
+                    StateHasChanged();
                 }
             }
-        }
-        private void LogIn()
+        } 
+
+        private void GoToManager()
         {
+            if (loggedUser is not null)
+                Navigator.NavigateTo("/accountmanager/");
+        }
+        private async void LogIn()
+        {
+            if (loggedUser is not null)
+            {
+                isLoggedIn = true;
+            }
             if (ifConnectionSuccessful == false)
             {
                 return;
@@ -171,6 +191,7 @@ else
                     string hashString = hash.GetHash(password, login.salt);
                     if (login.Password == hashString)
                     {
+                        await ProtectedSessionStore.SetAsync("uId", login.Id);
                         isAdmin = login.isAdmin;
                         isLoggedIn = true;
                         loggedUser = login;
@@ -205,13 +226,15 @@ else
             
         }
 
-        private void LogOut()
+        private async void LogOut()
         {
+            await ProtectedSessionStore.SetAsync("uId", -1);
             username = "";
             password = "";
             isLoggedIn = false;
             userId = "-1";
             ShowMessage(ToastType.Info);
+            StateHasChanged();
             Navigator.NavigateTo("/account");
         }
 
@@ -243,7 +266,7 @@ else
                     db.SaveChanges();
                 }
                 if (loggedUser is not null)
-                    Navigator.NavigateTo("/refresh/" + loggedUser.Id.ToString());
+                    Navigator.NavigateTo("/refresh/");
             }
         }
 
@@ -281,8 +304,8 @@ else
 
                 db.Database.ExecuteSqlRaw("TRUNCATE TABLE books");
             }
-
-            Navigator.NavigateTo("/browse");
+            if (loggedUser is not null)
+                Navigator.NavigateTo("/refresh/");
         }
 
         protected void ClearUsersTable()

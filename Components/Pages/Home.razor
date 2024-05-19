@@ -12,8 +12,6 @@
 Możesz swobodnie przeglądać nasze zasoby. W celu wypożyczenia wybranej książki należy się zalogować, lub w przypadku braku konta - zarejestrować.
 <br/>
 
-<BrowseLibrary isAdmin = "false" isLoggedIn = "false"></BrowseLibrary>
-
 <div class = "database_status">
     <p>Status połączenia z bazą danych:</p>
     @if (!ifConnectionSuccessful)
@@ -25,6 +23,8 @@ Możesz swobodnie przeglądać nasze zasoby. W celu wypożyczenia wybranej ksią
         <p style = "color: green"><b>Połączono pomyślnie</b></p>
     }
 </div>
+
+<BrowseLibrary isAdmin = "false" isLoggedIn = "false"></BrowseLibrary>
 
 @code
 {

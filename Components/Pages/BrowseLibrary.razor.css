@@ -6,11 +6,16 @@ table {
 
 th, td {
     line-height: 2rem;
+    border: 0.1rem solid;
 }
 
 td.book_title {
     font-weight: bold;
     
+}
+
+button {
+    width: 3rem;
 }
 
 div.database_status {

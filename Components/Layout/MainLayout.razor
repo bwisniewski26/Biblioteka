@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject ProtectedSessionStorage ProtectedSessionStore
 
 <div class="bb-page">
 
@@ -42,7 +43,7 @@
                        new NavItem { Id = "1", Href = "/", IconName = IconName.HouseDoorFill, Text = "Strona główna", Match=NavLinkMatch.All},
                        new NavItem { Id = "2", Href = "/database_settings", IconName = IconName.DatabaseFill, Text = "Ustawienia bazy danych"},
                        new NavItem { Id = "3", IconName = IconName.Person, Text = "Użytkownik"},
-                       new NavItem { Id = "4", Href = "/account", IconName = IconName.PersonFillCheck, Text = "Zaloguj się", ParentId = "3"},
+                       new NavItem { Id = "4", Href = "/account", IconName = IconName.PersonFillCheck, Text = "Twoje konto", ParentId = "3"},
                        new NavItem { Id = "5", Href = "/register", IconName = IconName.PersonFillAdd, Text = "Zarejestruj się", ParentId = "3"}
                    };
 

@@ -6,4 +6,9 @@ table {
 
 th, td {
     line-height: 2rem;
+    border: 0.1rem solid;
+}
+
+button {
+    width: 3rem;
 }

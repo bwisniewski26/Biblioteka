@@ -23,14 +23,17 @@ div.button_login {
     margin: auto;
 }
 
-div.database_status { 
-    position: fixed;
+div.database_status {
     width:100%; 
-    height:70px; 
+    height:100%; 
     padding:5px; 
     bottom:0px;
 }
 
 input {
     background-image: url("/dololo.jpg");
+}
+
+hr {
+    border: 5px solid black;
 }

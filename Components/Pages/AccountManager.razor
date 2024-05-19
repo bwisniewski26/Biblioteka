@@ -7,6 +7,7 @@
 @using ProjektZaliczeniowyPR3.Models
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 
+@inject ProtectedSessionStorage ProtectedSessionStore
 @inject NavigationManager Navigator
 
 <h1>Menedżer kont</h1>
@@ -78,7 +79,32 @@ else
     public bool ifConnectionSuccessful = false;
     User loggedUser = new();
 
+    public int Id = -1;
+
     string response {get; set;}= "";
+
+
+    protected override async Task OnAfterRenderAsync(bool ifFirstRender)
+    {
+        if (ifFirstRender)
+        {
+            var result = await ProtectedSessionStore.GetAsync<int>("uId");
+            Id = result.Success ? result.Value : -1;
+            if (Id != -1)
+            {
+                if (ifConnectionSuccessful)
+                {
+                    using (var db = new LibraryContext())
+                    {
+                        loggedUser = db.users
+                        .Single(loggedUser => loggedUser.Id == Id);
+                    }
+                    Console.WriteLine(loggedUser.Username);
+                    }
+                    StateHasChanged();
+                }
+            }
+        } 
     protected override void OnInitialized()
     {
         ConnectionInfo info = new();
@@ -89,16 +115,6 @@ else
         {
             _users = db.users
             .ToList();
-        }
-        int uId = 0;
-        if (id != "")
-            uId = Convert.ToInt32(id);
-        foreach (var user in _users)
-        {
-            if (user.Id == uId)
-            {
-                loggedUser = user;
-            }
         }
         
     }
