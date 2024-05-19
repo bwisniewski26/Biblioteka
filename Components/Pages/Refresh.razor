@@ -1,14 +1,22 @@
 @page "/refresh"
 @page "/refresh/{text}"
-@inject NavigationManager NavigationManager
+@page "/refresh/{text}/{id}"
+@inject NavigationManager Navigator
 
 @code {
     [Parameter]
     public string Text { get; set; } = "";
+    [Parameter]
+    public string id { get; set; } = "";
 
     protected override void OnInitialized()
     {
-        NavigationManager.NavigateTo("/account/"+Text);
+        if (Text == "accountmanager")
+        {
+            Navigator.NavigateTo("/accountmanager/"+id);
+            return;
+        }
+        Navigator.NavigateTo("/account/"+Text);
     }
 
 }

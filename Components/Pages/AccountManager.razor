@@ -1,0 +1,137 @@
+@page "/accountmanager"
+@page "/accountmanager/{id}"
+
+@using BlazorBootstrap
+@using Microsoft.EntityFrameworkCore
+@using ProjektZaliczeniowyPR3.Data
+@using ProjektZaliczeniowyPR3.Models
+@using ProjektZaliczeniowyPR3.DatabaseConnection
+
+@inject NavigationManager Navigator
+
+<h1>Menedżer kont</h1>
+
+@if (!ifConnectionSuccessful)
+{
+    <p>Brak połączenia z bazą danych. Sprawdź ustawienia.</p>
+}
+else
+{
+
+    @if (loggedUser is null)
+    {
+        <p>Ta strona służy wyłącznie do zarządzania kontami przez administratora serwisu. <b/>Zaloguj się i przejdź do tej strony przez panel użytkownika. </p>
+    }
+    else
+    {
+        <table>
+            <thead>
+                <th>Nazwa użytkownika</th>
+                <th>Hash hasła</th>
+                <th>Administrator?</th>
+                <th>Ilość książek</th>
+                <th>Usuń konto</th>
+            </thead>
+            <tbody>
+                @if (_users.Count > 0)
+                {
+                    foreach (var user in _users)
+                    {
+                        <tr>
+                            <td>@user.Username</td>
+                            <td>@user.Password</td>
+                            @if (user.isAdmin)
+                            {
+                                <td>Tak</td>
+                            }
+                            else
+                            {
+                                <td>Nie</td>
+                            }
+                            @if (user.Books is not null)
+                            {
+                                <td>@user.Books.Count</td>
+                            }
+                            else
+                            {
+                                <td>0</td>
+                            }
+                            <td><button><Icon Name = "IconName.Trash" @onclick = "() => RemoveUser(user.Id)"></Icon></button></td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+        <div class = "response">
+            <p>@response</p>
+        </div>
+    }
+
+}
+
+@code
+{
+    List<User> _users = new();
+    [Parameter] public string id { get; set; } = "";
+
+    public bool ifConnectionSuccessful = false;
+    User loggedUser = new();
+
+    string response {get; set;}= "";
+    protected override void OnInitialized()
+    {
+        ConnectionInfo info = new();
+        ifConnectionSuccessful = info.TryConnection();
+        if (ifConnectionSuccessful)
+        if (id != "")
+        using (var db = new LibraryContext())
+        {
+            _users = db.users
+            .ToList();
+        }
+        int uId = 0;
+        if (id != "")
+            uId = Convert.ToInt32(id);
+        foreach (var user in _users)
+        {
+            if (user.Id == uId)
+            {
+                loggedUser = user;
+            }
+        }
+        
+    }
+
+    protected void RemoveUser(int Id)
+    {
+        if (Id == Convert.ToInt32(id))
+        {
+            return;
+        }
+
+        ConnectionInfo info = new();
+        List<Book> books = new();
+        using (var db = new LibraryContext())
+        {
+            books = db.books
+            .ToList();
+        }
+        foreach (var book in books)
+        {
+            if (book.UserId == Id)
+                book.UserId = -1;
+        }
+
+        User user = new();
+        using (var db = new LibraryContext())
+        {
+            user = db.users
+            .Single(user => user.Id == Id);
+
+            db.Entry(user).State = EntityState.Deleted;
+            db.SaveChanges();        
+        }
+        Navigator.NavigateTo("/refresh/accountmanager/" + id);
+    }
+}

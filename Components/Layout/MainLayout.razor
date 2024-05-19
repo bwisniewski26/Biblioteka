@@ -50,7 +50,11 @@
     }
 
 
-    private void ToggleSidebar() => sidebar.ToggleSidebar();
+    private void ToggleSidebar() 
+    {
+        if (sidebar is not null)
+            sidebar.ToggleSidebar();
+    }
 }
 
 <style>

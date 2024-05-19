@@ -23,7 +23,7 @@
 
 @if (displayErrorMessages)
 {
-<div class = "error_message" style = "color: red;">
+<div class = "error_message" style = "color: red; text-align: center;">
     @if (username.Length == 0)
     {
         @errorMessages[0]
@@ -38,6 +38,7 @@
     }
 </div>
 }
+
 
 
 <div class = "database_status">
@@ -60,7 +61,7 @@
     bool userExists = false;
     List<ToastMessage> messages = new List<ToastMessage>();
 
-    string[] errorMessages = ["Nie podano loginu!", "Nie podano hasła!", "Użytkownik istnieje!"];
+    string[] errorMessages = ["Nie podano loginu!", "Nie podano hasła!", "Użytkownik o podanej nazwie istnieje!"];
 
     protected override void OnInitialized()
     {
@@ -71,6 +72,7 @@
 
     protected void AddUser()
     {
+        displayErrorMessages = false;
         if (username.Length == 0 || password.Length == 0)
         {
             displayErrorMessages = true;
