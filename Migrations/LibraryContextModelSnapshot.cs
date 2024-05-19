@@ -53,6 +53,29 @@ namespace ProjektZaliczeniowyPR3.Migrations
                     b.ToTable("books");
                 });
 
+            modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.Logs", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsUserAdmin")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("OperationsType")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("logs");
+                });
+
             modelBuilder.Entity("ProjektZaliczeniowyPR3.Models.User", b =>
                 {
                     b.Property<int>("Id")

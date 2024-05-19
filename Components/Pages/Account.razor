@@ -49,9 +49,19 @@ else
         <input @bind = "desc">
         <button @onclick = "AddBook">Zapisz</button>
         <br/>
+        <p>Aby wypożyczyć książkę kliknij na ikonę książki obok jej wpisu.</p>
+        @if (loggedUser is not null)
+        {
+            <BrowseLibrary isLoggedIn = "true" UserId="@loggedUser.Id" showDatabaseInfo = "false"></BrowseLibrary>
+            <p>Aby zwrócić książkę kliknij na ikonę obok jej wpisu.</p>
+            <RentedBooks UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RentedBooks>
+            <p>Aby usunąć książkę kliknij na ikonę obok jej wpisu</p>
+            <RemoveBook UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RemoveBook>
+        }
         <button @onclick = "ClearTable">Usuń wszystkie książki</button>
         <br/>
         <button @onclick = "ClearUsersTable">Usuń wszystkich użytkowników</button>
+
     }
     else
     {
@@ -183,6 +193,7 @@ else
             password = "";
             isLoggedIn = false;
             userId = "-1";
+            ShowMessage(ToastType.Info);
             Navigator.NavigateTo("/account");
         }
 
@@ -191,11 +202,13 @@ else
             if (title.Length > 0 && author.Length > 0)
             {
                 Book ksiazka = new Book(title, author);
+                Logs newLog = new Logs();
                 if (desc.Length > 0)
                 {
                     ksiazka.Description = desc;
                 }
-
+                newLog.Username = username;
+                newLog.OperationsType = Logs.OperationType.BookAdd;
                 using (var db = new LibraryContext())
                 {
                     try {
@@ -208,7 +221,11 @@ else
                     finally {}
                     db.books.Add(ksiazka);
                     db.SaveChanges();
+                    db.logs.Add(newLog);
+                    db.SaveChanges();
                 }
+                if (loggedUser is not null)
+                    Navigator.NavigateTo("/refresh/" + loggedUser.Id.ToString());
             }
         }
 
@@ -220,7 +237,12 @@ else
 
             toastMessage.Type = toastType;
             toastMessage.Title = isLoggedIn ? "Zalogowano pomyślnie" : "Wylogowano pomyślnie";
-            toastMessage.Message = isAdmin ? "Odblokowano dodawanie książek" : "Miłego wypożyczania! :)";
+            if (isLoggedIn)
+            {
+                toastMessage.Message = isAdmin ? "Odblokowano dodawanie książek" : "Miłego wypożyczania! :)";
+            }
+            else
+                toastMessage.Message = "Wróć do nas jak najszybciej!";
             toastMessage.AutoHide = !(toastType == ToastType.Danger || toastType == ToastType.Warning);
 
             return toastMessage;

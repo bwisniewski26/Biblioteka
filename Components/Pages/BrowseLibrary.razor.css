@@ -14,7 +14,6 @@ td.book_title {
 }
 
 div.database_status {
-    position:fixed; 
     width:100%; 
     height:70px; 
     padding:5px; 

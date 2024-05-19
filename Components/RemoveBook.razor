@@ -3,7 +3,7 @@
 
 @inject NavigationManager Navigator
 
-<h2>Wypożyczone książki</h2>
+<h2>Usuń książkę z bazy danych</h2>
 
 @if (ifConnectionSuccessful)
 {
@@ -13,7 +13,7 @@
                 <th>Tytuł</th>
                 <th>Autor</th>
                 <th>Opis</th>
-                <th>Zwróć książkę</th>
+                <th>Usuń książkę</th>
             </thead>
             <tbody>
                 @if (_books is not null)
@@ -24,7 +24,7 @@
                             <td style = "book_title">@book.Title</td>
                             <td>@book.Author</td>
                             <td>@book.Description</td>
-                            <td><button @onclick = "() => ReturnBook(book.Id)"> <Icon Name = "IconName.BookmarkDashFill"></Icon> </button> </td>
+                            <td><button @onclick = "() => DeleteBook(book.Id)"> <Icon Name = "IconName.Trash"></Icon> </button> </td>
                         </tr>
                     }
                 }
@@ -50,42 +50,57 @@
             using (var db = new LibraryContext())
             {
                 _books = db.books
-                    .Where(book => book.UserId == UserId)
                     .ToList();
             }
         }
     }
 
-    protected void ReturnBook(int id)
+    protected void DeleteBook(int Id)
     {
         if (ifConnectionSuccessful)
         {
             using (var db = new LibraryContext())
             {
-                Book book = new();
-                User user = new();
-                Logs newLog = new();
+                try
+                {
+                    Book book = new();
+                    List<User> users = new();
+                    User admin = new();
+                    Logs newLog = new();
                     book = db.books
-                    .Single(book => book.Id == id);
-                    book.isAvailable = true;
-                    book.UserId = UserId;
-                    db.Entry(book).State = EntityState.Modified;
+                    .Single(book => book.Id == Id);
+                    users = db.users
+                    .ToList();
+                    foreach (var user in users)
+                    {
+                        if (user.Id == book.UserId)
+                        {
+                            user.Books.Remove(book);
+                        }
+                    }
+                    db.Entry(book).State = EntityState.Deleted;
                     db.SaveChanges();
-                    user = db.users
+                    
+                    admin = db.users
                     .Single(user => user.Id == UserId);
-
-                    user.Books.Remove(book);
-                    db.Entry(user).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    newLog.Username = user.Username;
-                    newLog.IsUserAdmin = user.isAdmin;
+                    newLog.Username = admin.Username;
+                    newLog.IsUserAdmin = admin.isAdmin;
                     newLog.OperationsType = Logs.OperationType.BookReturn;
 
                     db.logs.Add(newLog);
+
+        
+
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                }
+                finally {}
 
             }
         }
         Navigator.NavigateTo("/refresh/" + UserId.ToString());
     }
+
 }

@@ -10,6 +10,8 @@ public class LibraryContext : DbContext
     public DbSet<Book> books { get; set; } = null!;
     public DbSet<User> users { get; set; } = null!;
 
+    public DbSet<Logs> logs { get; set; } = null!;
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         ConnectionInfo info = new();

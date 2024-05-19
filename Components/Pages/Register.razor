@@ -82,6 +82,7 @@
             displayErrorMessages = true;
             return;
         }
+        Logs newLog = new();
         User newUser = new();
         newUser.Username = username;
         newUser.Password = password;
@@ -110,6 +111,8 @@
                 return;
             }
         }
+        newLog.Username = username;
+        newLog.OperationsType = Logs.OperationType.UserRegister;
         userExists = false;
         using (var db = new LibraryContext())
         {
@@ -122,6 +125,8 @@
             }
             finally {}
             db.users.Add(newUser);
+            db.SaveChanges();
+            db.logs.Add(newLog);
             db.SaveChanges();
         }
 

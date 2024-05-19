@@ -78,18 +78,20 @@ else
 }
 
 }
-
-<div class = "database_status">
-    <p>Status połączenia z bazą danych:</p>
-    @if (!ifConnectionSuccessful)
-    {
-        <p style = "color: red"><b>Brak połączenia z bazą danych!</b></p>
-    }
-    else
-    {
-        <p style = "color: green"><b>Połączono pomyślnie</b></p>
-    }
-</div>
+@if (showDatabaseInfo)
+{
+    <div class = "database_status">
+        <p>Status połączenia z bazą danych:</p>
+        @if (!ifConnectionSuccessful)
+        {
+            <p style = "color: red"><b>Brak połączenia z bazą danych!</b></p>
+        }
+        else
+        {
+            <p style = "color: green"><b>Połączono pomyślnie</b></p>
+        }
+    </div>
+}
 
 @code {
 
@@ -98,6 +100,8 @@ else
     [Parameter] public bool isAdmin { get; set; } = false;
 
     [Parameter] public int UserId { get; set; } = -1;
+
+    [Parameter] public bool showDatabaseInfo { get; set; } = true;
 
     int id = -1;
     List<Book> _books = new();
@@ -127,8 +131,10 @@ else
         {
             Book book = new();
             User user = new();
+            Logs newLog = new();
             if (ifConnectionSuccessful)
             {
+
                 book = db.books
                 .Single(book => book.Id == id);
                 book.isAvailable = false;
@@ -144,7 +150,11 @@ else
                 db.Entry(user).State = EntityState.Modified;
                 db.SaveChanges();
 
-                
+                newLog.Username = user.Username;
+                newLog.IsUserAdmin = user.isAdmin;
+                newLog.OperationsType = Logs.OperationType.BookRental;
+
+                db.logs.Add(newLog);
             }
             
         }
