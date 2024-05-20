@@ -1,4 +1,7 @@
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace ProjektZaliczeniowyPR3.Models;
+[Table("books")]
 public class Book
 {
     

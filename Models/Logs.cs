@@ -1,5 +1,7 @@
-namespace ProjektZaliczeniowyPR3.Models;
+using System.ComponentModel.DataAnnotations.Schema;
 
+namespace ProjektZaliczeniowyPR3.Models;
+[Table("logs")]
 public class Logs
 {
     public int Id { get; set; }

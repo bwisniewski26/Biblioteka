@@ -138,13 +138,11 @@ else
                     {
                         using (var db = new LibraryContext())
                         {
-                            Console.WriteLine(userId);
                             loggedUser = db.users
                             .Single(loggedUser => loggedUser.Id == Id);
                             isLoggedIn = true;
                             isAdmin = loggedUser.isAdmin;
                         }
-                        Console.WriteLine(loggedUser.Username);
                     }
                     StateHasChanged();
                 }

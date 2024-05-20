@@ -25,8 +25,7 @@ public class ConnectionInfo {
     public string PrepareToSave(bool ifOverwrite = false)
     {
         string json = JsonSerializer.Serialize(this);
-
-        Console.WriteLine(json);
+        
 
         string path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "LibraryProject");
 
