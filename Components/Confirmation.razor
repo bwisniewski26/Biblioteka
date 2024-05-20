@@ -1,0 +1,59 @@
+@inject NavigationManager Navigator
+@using Microsoft.EntityFrameworkCore
+@using ProjektZaliczeniowyPR3.DatabaseConnection
+
+<p>Zamierzasz wyczyścić tabelę z bazy danych</p>
+<p>Czy chcesz kontynuować?</p>
+<Button Color="ButtonColor.Success" style = "button_no"> Nie </Button> <Button Color="ButtonColor.Danger" disabled = "@(!ifAllowed)" @onclick = "Execute" style="float: right;"> Tak </Button>
+
+
+@code
+{
+    [Parameter] public int Mode { get; set; } = -1;
+
+    public bool ifConnectionSuccessful = false, ifAllowed = false;
+
+
+    protected override void OnInitialized()
+    {
+        ConnectionInfo info = new();
+        ifConnectionSuccessful = info.TryConnection();
+        if (Mode != -1 && ifConnectionSuccessful)
+            ifAllowed = true;
+
+        base.OnInitialized();
+    }
+
+    protected void Execute()
+    {
+        if (Mode == 1)
+        {
+            RemoveUsers();
+        }
+        else if (Mode == 2)
+        {
+            RemoveBooks();
+        }
+    }
+    protected void RemoveUsers()
+    {
+        using (var db = new LibraryContext())
+        {
+            db.Database.ExecuteSqlRaw("TRUNCATE TABLE users CASCADE");
+        }
+
+        Navigator.NavigateTo("/");
+    }
+
+    protected void RemoveBooks()
+    {
+        if (ifConnectionSuccessful)
+        {
+                using (var db = new LibraryContext())
+                {
+                    db.Database.ExecuteSqlRaw("TRUNCATE TABLE books");
+                }
+        }
+        Navigator.NavigateTo("/account");
+    }
+}

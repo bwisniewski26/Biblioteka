@@ -11,6 +11,8 @@
 
 <PageTitle>Panel użytkownika</PageTitle>
 <Toasts class="p-3" Messages="messages" Delay="1000" Placement="ToastsPlacement.TopRight" />
+<Modal @ref="modal" />
+
 
 @if (!isLoggedIn)
 {
@@ -23,7 +25,7 @@
         <input @bind = "password">
         <br/>
         <br/>
-        <button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Zaloguj się</button>
+        <Button Color="ButtonColor.Primary" @onclick = "LogIn" style = "button_login">Zaloguj się</Button>
         <p>Nie masz konta? <a href="/register">Zarejestruj się!</a></p>
         <p>@response</p>
     </div>
@@ -32,11 +34,11 @@
 else
 {
     <div class = "logout_button">
-        <button Color="ButtonColor.Primary" @onclick = "LogOut" style = "button_login">Wyloguj się</button>
+        <Button Color="ButtonColor.Primary" @onclick = "LogOut" style = "button_login"><Icon Name = "IconName.Person"></Icon> Wyloguj się</Button>
     </div>
     @if (loggedUser is not null)
     {
-        <h2>Witaj @loggedUser.Username!</h2>
+        <h2><b>Witaj @loggedUser.Username!</b></h2>
     }
     @if (isAdmin)
     {
@@ -49,7 +51,7 @@ else
         <input @bind = "author">
         <p>Opis</p>
         <input @bind = "desc">
-        <button @onclick = "AddBook">Zapisz</button>
+        <Button Color="ButtonColor.Success" @onclick = "AddBook"><b><Icon Name = "IconName.Floppy"></Icon> Zapisz</b></Button>
         <br/>
         @if (loggedUser is not null)
         {
@@ -63,13 +65,8 @@ else
             <hr class="rounded">
             <p><b>Aby usunąć książkę kliknij na ikonę obok jej wpisu</b></p>
             <RemoveBook UserId = "@loggedUser.Id" ifConnectionSuccessful = "@ifConnectionSuccessful"></RemoveBook>
-            <button @onclick = "GoToManager">Menedżer kont</button>
-            <br/>
+            <Button Color="ButtonColor.Primary" @onclick = "GoToManager">Menedżer kont</Button> <Button Color="ButtonColor.Danger" @onclick = "ClearTable">Usuń wszystkie książki</Button> <Button Color="ButtonColor.Danger" @onclick = "ClearUsersTable">Usuń wszystkich użytkowników</Button>
         }
-        <button @onclick = "ClearTable">Usuń wszystkie książki</button>
-        <br/>
-        <button @onclick = "ClearUsersTable">Usuń wszystkich użytkowników</button>
-        <br/>
 
     }
     else
@@ -100,6 +97,7 @@ else
 
 
 @code {
+        private Modal modal = default!;
         List<ToastMessage> messages = new List<ToastMessage>();
 
         User loggedUser { get; set; } = new();
@@ -158,16 +156,9 @@ else
             if (loggedUser is not null)
                 Navigator.NavigateTo("/accountmanager/");
         }
-        private async void LogIn()
+
+        private List<User> ListUsers()
         {
-            if (loggedUser is not null)
-            {
-                isLoggedIn = true;
-            }
-            if (ifConnectionSuccessful == false)
-            {
-                return;
-            }
             List<User> users = new();
             using (var db = new LibraryContext())
                 {
@@ -182,6 +173,48 @@ else
                     users = db.users
                     .ToList();
             }
+            return users;
+        }
+
+        private async void SetLoginParameters(User login)
+        {
+            await ProtectedSessionStore.SetAsync("uId", login.Id);
+            isAdmin = login.isAdmin;
+            isLoggedIn = true;
+            loggedUser = login;
+        }
+
+        private void GenerateLoginLog(User login)
+        {
+            Logs newLog = new();
+            using (var db = new LibraryContext())
+            {
+                try {
+                    db.Database.CanConnect();
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message);
+                    return;
+                }
+                finally {}
+                newLog.Username = login.Username;
+                newLog.IsUserAdmin = login.isAdmin;
+                newLog.OperationsType = Logs.OperationType.UserLogin;
+                db.logs.Add(newLog);
+            }
+        }
+        private async void LogIn()
+        {
+            if (loggedUser is not null)
+            {
+                isLoggedIn = true;
+            }
+            if (ifConnectionSuccessful == false)
+            {
+                return;
+            }
+            List<User> users = ListUsers();
             
             foreach(var login in users)
             {
@@ -191,28 +224,10 @@ else
                     string hashString = hash.GetHash(password, login.salt);
                     if (login.Password == hashString)
                     {
+                        SetLoginParameters(login);
                         await ProtectedSessionStore.SetAsync("uId", login.Id);
-                        isAdmin = login.isAdmin;
-                        isLoggedIn = true;
-                        loggedUser = login;
                         ShowMessage(ToastType.Success);
-                        Logs newLog = new();
-                        using (var db = new LibraryContext())
-                        {
-                            try {
-                                db.Database.CanConnect();
-                            }
-                            catch (Exception e)
-                            {
-                                Console.WriteLine(e.Message);
-                                return;
-                            }
-                            finally {}
-                            newLog.Username = login.Username;
-                            newLog.IsUserAdmin = login.isAdmin;
-                            newLog.OperationsType = Logs.OperationType.UserLogin;
-                            db.logs.Add(newLog);
-                        }
+                        GenerateLoginLog(login);
                     }
                     else
                     {
@@ -226,48 +241,74 @@ else
             
         }
 
-        private async void LogOut()
+        private async void ClearInput()
         {
             await ProtectedSessionStore.SetAsync("uId", -1);
             username = "";
             password = "";
             isLoggedIn = false;
             userId = "-1";
-            ShowMessage(ToastType.Info);
-            StateHasChanged();
-            Navigator.NavigateTo("/account");
         }
 
-        private void AddBook()
+        private void LogOut()
         {
-            if (title.Length > 0 && author.Length > 0)
+            ClearInput();
+            ShowMessage(ToastType.Info);
+            Navigator.NavigateTo("/");
+        }
+
+        private async void GenerateAddBookLog()
+        {
+            if (ifConnectionSuccessful)
             {
-                Book ksiazka = new Book(title, author);
                 Logs newLog = new Logs();
-                if (desc.Length > 0)
-                {
-                    ksiazka.Description = desc;
-                }
                 newLog.Username = username;
                 newLog.OperationsType = Logs.OperationType.BookAdd;
                 using (var db = new LibraryContext())
                 {
-                    try {
-                        db.Database.CanConnect();
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                    }
-                    finally {}
-                    db.books.Add(ksiazka);
-                    db.SaveChanges();
                     db.logs.Add(newLog);
-                    db.SaveChanges();
+                    await db.SaveChangesAsync();
                 }
-                if (loggedUser is not null)
-                    Navigator.NavigateTo("/refresh/");
             }
+        }
+
+        private Book? CreateBook()
+        {
+            if (title.Length > 0 && author.Length > 0)
+            {
+                Book newBook = new Book(title, author);
+                if (desc.Length > 0)
+                    newBook.Description = desc;
+                return newBook;
+            }
+            return null;
+        }
+
+        private async void InsertBookIntoDb(Book newBook)
+        {
+            using (var db = new LibraryContext())
+                {
+                try {
+                    db.Database.CanConnect();
+                }
+                catch (Exception e)
+                {
+                    return;
+                }
+                finally {}
+                db.books.Add(newBook);
+                await db.SaveChangesAsync();
+            }
+        }
+        private void AddBook()
+        {
+            Book? newBook = CreateBook();
+            if (newBook is null)
+                return;
+            InsertBookIntoDb(newBook);
+            GenerateAddBookLog();
+            if (loggedUser is not null)
+                Navigator.NavigateTo("/refresh/");
         }
 
         private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));
@@ -289,11 +330,11 @@ else
             return toastMessage;
         }
 
-        protected void ClearTable()
+        protected void GenerateClearTableLog()
         {
-            Logs newLog = new();
             using (var db = new LibraryContext())
             {
+                Logs newLog = new();
                 if (loggedUser is not null)
                 {
                     newLog.Username = loggedUser.Username;
@@ -302,19 +343,28 @@ else
                     db.logs.Add(newLog);
                 }
 
-                db.Database.ExecuteSqlRaw("TRUNCATE TABLE books");
             }
-            if (loggedUser is not null)
-                Navigator.NavigateTo("/refresh/");
         }
 
-        protected void ClearUsersTable()
+        protected void Refresh()
         {
-            using (var db = new LibraryContext())
-            {
-                db.Database.ExecuteSqlRaw("TRUNCATE TABLE users CASCADE");
-            }
+            Navigator.NavigateTo("/refresh");
+        }
+        protected async Task ClearTable()
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("Mode", 2);
+            await modal.ShowAsync<Confirmation>(title: "Czyszczenie bazy danych", parameters: parameters);
+            StateHasChanged();
+            Navigator.NavigateTo("/account");
+        }
 
+        protected async Task ClearUsersTable()
+        {
+            var parameters = new Dictionary<string, object>();
+            parameters.Add("Mode", 1);
+            await modal.ShowAsync<Confirmation>(title: "Czyszczenie bazy danych", parameters: parameters);
+            StateHasChanged();
             Navigator.NavigateTo("/");
         }
 }

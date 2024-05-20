@@ -66,7 +66,7 @@ else
                         {
                             <td>Niedostępna</td>
                         }
-                        <button id="@book.Id" @onclick = "() => RentBook(book.Id)" disabled = "@(!book.isAvailable)"><Icon Name = "IconName.BookFill"></Icon></button>
+                        <Button Color="ButtonColor.Secondary" id="@book.Id" @onclick = "() => RentBook(book.Id)" disabled = "@(!book.isAvailable)"><Icon Name = "IconName.BookFill"></Icon></Button>
                     </tr>
                 }
 

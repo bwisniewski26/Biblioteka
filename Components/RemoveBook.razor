@@ -24,7 +24,7 @@
                             <td style = "book_title">@book.Title</td>
                             <td>@book.Author</td>
                             <td>@book.Description</td>
-                            <td><button @onclick = "() => DeleteBook(book.Id)"> <Icon Name = "IconName.Trash"></Icon> </button> </td>
+                            <td><Button Color="ButtonColor.Secondary" @onclick = "() => DeleteBook(book.Id)"> <Icon Name = "IconName.Trash"></Icon> </Button> </td>
                         </tr>
                     }
                 }

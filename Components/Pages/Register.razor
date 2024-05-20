@@ -5,7 +5,7 @@
 @using ProjektZaliczeniowyPR3.Models
 
 @inject NavigationManager Navigator
-
+@inject ProtectedSessionStorage ProtectedSessionStore
 
 <PageTitle>Nowe konto</PageTitle>
 <h1>Nowe konto</h1><br/>
@@ -17,7 +17,7 @@
     <input @bind = "password">
     <p>Czy użytkonwnik jest administratorem? <input type = "checkbox" @bind = "isAdmin"></p>
     <div class = "register_button">
-        <button @onclick = "AddUser">Zarejestruj</button>
+        <Button Color="ButtonColor.Primary" @onclick = "AddUser"><b><Icon Name = "IconName.PersonAdd"></Icon> Zarejestruj się</b></Button>
     </div>
 </div>
 
@@ -69,23 +69,35 @@
         ifConnectionSuccessful = info.TryConnection();
     }
 
-
-    protected void AddUser()
+    private async void CreateAddUserLog()
     {
-        displayErrorMessages = false;
-        if (username.Length == 0 || password.Length == 0)
-        {
-            displayErrorMessages = true;
-            return;
-        }
         Logs newLog = new();
+        newLog.Username = username;
+        newLog.OperationsType = Logs.OperationType.UserRegister;
+        if (ifConnectionSuccessful)
+        {
+            using (var db = new LibraryContext())
+            {
+                db.logs.Add(newLog);
+                await db.SaveChangesAsync();
+            }
+        }
+    }
+
+    private User CreateUser()
+    {
         User newUser = new();
         newUser.Username = username;
         newUser.Password = password;
         newUser.salt = hash.GetSalt();
         newUser.Password = hash.GetHash(password, newUser.salt);
         newUser.isAdmin = isAdmin;
-        List <User> users;
+        return newUser;
+    }
+
+    private List<User> ListUsers()
+    {
+        List<User> users = new();
         using (var db = new LibraryContext())
         {
             try {
@@ -99,6 +111,12 @@
             users = db.users
             .ToList();
         }
+        return users;
+    }
+
+    protected bool DoesUserExist()
+    {
+        List <User> users = ListUsers();
         foreach (var user in users)
         {
             if (user.Username == username)
@@ -106,12 +124,14 @@
                 displayErrorMessages = true;
                 userExists = true;
                 StateHasChanged();
-                return;
+                return true;
             }
         }
-        newLog.Username = username;
-        newLog.OperationsType = Logs.OperationType.UserRegister;
-        userExists = false;
+        return false;
+    }
+
+    private async void AddUserToDb(User newUser)
+    {
         using (var db = new LibraryContext())
         {
             try {
@@ -123,10 +143,28 @@
             }
             finally {}
             db.users.Add(newUser);
-            db.SaveChanges();
-            db.logs.Add(newLog);
-            db.SaveChanges();
+            await db.SaveChangesAsync();
         }
+    }
+
+    protected async void AddUser()
+    {
+        displayErrorMessages = false;
+        if (username.Length == 0 || password.Length == 0)
+        {
+            displayErrorMessages = true;
+            return;
+        }
+        User newUser = CreateUser();
+        
+        userExists = DoesUserExist();
+
+        if (userExists)
+            return;
+
+        AddUserToDb(newUser);
+        CreateAddUserLog();
+        await ProtectedSessionStore.SetAsync("uId", -1);
         Navigator.NavigateTo("/account");
     }
         private void ShowMessage(ToastType toastType) => messages.Add(CreateToastMessage(toastType));

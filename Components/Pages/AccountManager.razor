@@ -49,15 +49,8 @@ else
                             {
                                 <td>Nie</td>
                             }
-                            @if (user.Books is not null)
-                            {
-                                <td>@user.Books.Count</td>
-                            }
-                            else
-                            {
-                                <td>0</td>
-                            }
-                            <td><button><Icon Name = "IconName.Trash" @onclick = "() => RemoveUser(user.Id)"></Icon></button></td>
+                            <td>@CalculateBooks(user.Id)</td>
+                            <td><Button Color="ButtonColor.Secondary" @onclick = "() => RemoveUser(user.Id)"><Icon Name = "IconName.Trash"></Icon></Button></td>
                         </tr>
                     }
                 }
@@ -99,12 +92,12 @@ else
                         loggedUser = db.users
                         .Single(loggedUser => loggedUser.Id == Id);
                     }
-                    Console.WriteLine(loggedUser.Username);
-                    }
-                    StateHasChanged();
                 }
+                    StateHasChanged();
             }
-        } 
+        }
+    } 
+    
     protected override void OnInitialized()
     {
         ConnectionInfo info = new();
@@ -119,6 +112,19 @@ else
         
     }
 
+    protected List<Book> ListBooks()
+    {
+        List<Book> books = new();
+        using (var db = new LibraryContext())
+        {
+            books = db.books
+            .ToList();
+        }
+        return books;
+    }
+
+    
+
     protected void RemoveUser(int Id)
     {
         if (Id == Convert.ToInt32(id))
@@ -128,27 +134,36 @@ else
         }
 
         ConnectionInfo info = new();
-        List<Book> books = new();
+        List<Book> books = ListBooks();
         using (var db = new LibraryContext())
         {
-            books = db.books
-            .ToList();
-        }
-        foreach (var book in books)
-        {
-            if (book.UserId == Id)
-                book.UserId = -1;
-        }
+            foreach (var book in books)
+            {
+                if (book.UserId == Id)
+                    book.UserId = -1;
+                    db.Entry(book).State = EntityState.Modified;
+            }
+            
 
-        User user = new();
-        using (var db = new LibraryContext())
-        {
-            user = db.users
-            .Single(user => user.Id == Id);
+            User user = new();
+                user = db.users
+                .Single(user => user.Id == Id);
 
-            db.Entry(user).State = EntityState.Deleted;
-            db.SaveChanges();        
+                db.Entry(user).State = EntityState.Deleted;
+                db.SaveChanges();        
         }
         Navigator.NavigateTo("/refresh/accountmanager/" + id);
+    }
+    
+    protected int CalculateBooks(int userId)
+    {
+        int result = 0;
+        List<Book> books = ListBooks();
+        foreach (var book in books)
+        {
+            if (book.UserId == userId)
+                result++;
+        }
+        return result;
     }
 }
