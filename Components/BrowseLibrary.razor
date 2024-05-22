@@ -98,13 +98,41 @@ else
         {
             using (var db = new LibraryContext())
             {
+
                 if (db.Database.CanConnect())
                 {
                     ifConnectionSuccessful = true;
                 }
-                _books = db.books
+                try {
+                    _books = db.books
                     .OrderBy(b => b.Title)
                     .ToList();
+                }
+                catch (SqlException exception) {
+                    try {
+                       Console.WriteLine(exception.Message);
+                       ExecuteSQLScript(); 
+                    }
+                    catch {}
+                    finally {}
+                }
+                finally {}
+                
+            }
+        }
+    }
+    
+    protected void ExecuteSQLScript()
+    {
+        using (var context = new LibraryContext())
+        {
+            context.Database.EnsureCreated();
+            var sql = File.ReadAllText(Path.Combine(Directory.GetCurrentDirectory(), "script.sql"));
+            string[] commands = sql.Split(new string[] { "GO" },
+            StringSplitOptions.RemoveEmptyEntries);
+            foreach (var command in commands)
+            {
+                context.Database.ExecuteSqlRaw(command);
             }
         }
     }
