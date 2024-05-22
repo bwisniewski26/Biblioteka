@@ -1,6 +1,3 @@
-@using Microsoft.EntityFrameworkCore
-@using ProjektZaliczeniowyPR3.Components
-
 @inject NavigationManager Navigator
 
 <h2>Usuń książkę z bazy danych</h2>
@@ -21,7 +18,7 @@
                     @foreach (var book in _books)
                     {
                         <tr>
-                            <td style = "book_title">@book.Title</td>
+                            <td>@book.Title</td>
                             <td>@book.Author</td>
                             <td>@book.Description</td>
                             <td><Button Color="ButtonColor.Secondary" @onclick = "() => DeleteBook(book.Id)"> <Icon Name = "IconName.Trash"></Icon> </Button> </td>
@@ -39,6 +36,7 @@
     [Parameter] public int UserId { get; set;} = -1;
 
     [Parameter] public bool ifConnectionSuccessful { get; set; } = false;
+    
 
     public List<Book> _books { get; set; } = new();
 
@@ -55,51 +53,27 @@
         }
     }
 
+    protected async void GenerateDeleteLog()
+    {
+        Logs newLog = new();
+        using (var db = new LibraryContext())
+        {
+           User user = db.users
+                .Single(user => user.Id == UserId);
+            newLog.Username = user.Username;
+            newLog.IsUserAdmin = user.isAdmin;
+            newLog.OperationsType = Logs.OperationType.BookDelete;
+
+            db.logs.Add(newLog);
+            await db.SaveChangesAsync();
+        }
+    }
+
     protected void DeleteBook(int Id)
     {
-        if (ifConnectionSuccessful)
-        {
-            using (var db = new LibraryContext())
-            {
-                try
-                {
-                    Book book = new();
-                    List<User> users = new();
-                    User admin = new();
-                    Logs newLog = new();
-                    book = db.books
-                    .Single(book => book.Id == Id);
-                    users = db.users
-                    .ToList();
-                    foreach (var user in users)
-                    {
-                        if (user.Id == book.UserId)
-                        {
-                            user.Books.Remove(book);
-                        }
-                    }
-                    db.Entry(book).State = EntityState.Deleted;
-                    db.SaveChanges();
-                    
-                    admin = db.users
-                    .Single(user => user.Id == UserId);
-                    newLog.Username = admin.Username;
-                    newLog.IsUserAdmin = admin.isAdmin;
-                    newLog.OperationsType = Logs.OperationType.BookDelete;
-
-                    db.logs.Add(newLog);
-
-        
-
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e.Message);
-                }
-                finally {}
-
-            }
-        }
+        Book? book = _books.Find(book => book.Id == Id);
+        if (book is not null)
+            book.RemoveBook();
         Navigator.NavigateTo("/refresh/");
     }
 

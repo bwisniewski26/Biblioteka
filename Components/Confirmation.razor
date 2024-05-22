@@ -4,7 +4,7 @@
 
 <p>Zamierzasz wyczyścić tabelę z bazy danych</p>
 <p>Czy chcesz kontynuować?</p>
-<Button Color="ButtonColor.Success" style = "button_no"> Nie </Button> <Button Color="ButtonColor.Danger" disabled = "@(!ifAllowed)" @onclick = "Execute" style="float: right;"> Tak </Button>
+<Button Color="ButtonColor.Success"> Nie </Button> <Button Color="ButtonColor.Danger" disabled = "@(!ifAllowed)" @onclick = "Execute" style="float: right;"> Tak </Button>
 
 
 @code
@@ -12,6 +12,8 @@
     [Parameter] public int Mode { get; set; } = -1;
 
     public bool ifConnectionSuccessful = false, ifAllowed = false;
+
+    Tables _tables = new();
 
 
     protected override void OnInitialized()
@@ -37,23 +39,15 @@
     }
     protected void RemoveUsers()
     {
-        using (var db = new LibraryContext())
-        {
-            db.Database.ExecuteSqlRaw("TRUNCATE TABLE users CASCADE");
-        }
+        _tables.RemoveUsers();
 
         Navigator.NavigateTo("/");
     }
 
     protected void RemoveBooks()
     {
-        if (ifConnectionSuccessful)
-        {
-                using (var db = new LibraryContext())
-                {
-                    db.Database.ExecuteSqlRaw("TRUNCATE TABLE books");
-                }
-        }
+        _tables.RemoveBooks();
+        
         Navigator.NavigateTo("/account");
     }
 }

@@ -14,7 +14,7 @@
     <input @bind = "username">
     <br/>
     <p>Hasło</p>
-    <input @bind = "password">
+    <input type = "password" @bind = "password">
     <p>Czy użytkonwnik jest administratorem? <input type = "checkbox" @bind = "isAdmin"></p>
     <div class = "register_button">
         <Button Color="ButtonColor.Primary" @onclick = "AddUser"><b><Icon Name = "IconName.PersonAdd"></Icon> Zarejestruj się</b></Button>
@@ -57,8 +57,7 @@
 
     string username = "", password = "";
     private Hashing hash = new();
-    private bool isAdmin = false, ifConnectionSuccessful = false, displayErrorMessages = false;
-    bool userExists = false;
+    private bool isAdmin, ifConnectionSuccessful, displayErrorMessages, userExists;
     List<ToastMessage> messages = new List<ToastMessage>();
 
     string[] errorMessages = ["Nie podano loginu!", "Nie podano hasła!", "Użytkownik o podanej nazwie istnieje!"];
@@ -129,32 +128,18 @@
         }
         return false;
     }
-
-    private async void AddUserToDb(User newUser)
-    {
-        using (var db = new LibraryContext())
-        {
-            try {
-                db.Database.CanConnect();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message);
-            }
-            finally {}
-            db.users.Add(newUser);
-            await db.SaveChangesAsync();
-        }
-    }
+    
 
     protected async void AddUser()
     {
         displayErrorMessages = false;
+        
         if (username.Length == 0 || password.Length == 0)
         {
             displayErrorMessages = true;
             return;
         }
+        
         User newUser = CreateUser();
         
         userExists = DoesUserExist();
@@ -162,7 +147,8 @@
         if (userExists)
             return;
 
-        AddUserToDb(newUser);
+        newUser.AddUser();
+        
         CreateAddUserLog();
         await ProtectedSessionStore.SetAsync("uId", -1);
         Navigator.NavigateTo("/account");

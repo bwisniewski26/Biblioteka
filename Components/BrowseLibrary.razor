@@ -1,12 +1,8 @@
-@using Microsoft.Data.SqlClient
 @using Microsoft.EntityFrameworkCore
-@using ProjektZaliczeniowyPR3.Models
-@using ProjektZaliczeniowyPR3.Data;
-@using ProjektZaliczeniowyPR3.DatabaseConnection
 @inject NavigationManager Navigator
-@using static Microsoft.EntityFrameworkCore.RelationalDatabaseFacadeExtensions;
+
 <h3>Zasoby biblioteki</h3>
-@if (ifConnectionSuccessful)
+@if (_connectionSuccessful)
 {
 @if (!isLoggedIn)
 {
@@ -22,7 +18,7 @@
             @foreach (var book in _books)
             {
                 <tr>
-                    <td style = "book_title">@book.Title</td>
+                    <td>@book.Title</td>
                     <td>@book.Author</td>
                         @if (book.isAvailable)
                         {
@@ -55,7 +51,7 @@ else
                 @foreach (var book in _books)
                 {
                     <tr>
-                        <td style = "book_title">@book.Title</td>
+                        <td>@book.Title</td>
                         <td>@book.Author</td>
                         <td>@book.Description</td>
                         @if (book.isAvailable)
@@ -80,15 +76,11 @@ else
 
 @code {
 
-    bool ifConnectionSuccessful = false;
+    bool _connectionSuccessful = false;
     [Parameter] public bool isLoggedIn { get; set; } = false;
-    [Parameter] public bool isAdmin { get; set; } = false;
-
+    [Parameter] public bool IsAdmin { get; set; } = false;
     [Parameter] public int UserId { get; set; } = -1;
-
     [Parameter] public bool showDatabaseInfo { get; set; } = true;
-
-    int id = -1;
     List<Book> _books = new();
 
     protected override void OnInitialized()
@@ -101,28 +93,33 @@ else
 
                 if (db.Database.CanConnect())
                 {
-                    ifConnectionSuccessful = true;
+                    _connectionSuccessful = true;
                 }
                 try {
                     _books = db.books
                     .OrderBy(b => b.Title)
                     .ToList();
                 }
-                catch (SqlException exception) {
-                    try {
-                       Console.WriteLine(exception.Message);
-                       ExecuteSQLScript(); 
+                catch {
+                    try
+                    {
+                        ExecuteSqlScript();
                     }
-                    catch {}
-                    finally {}
+                    catch (Exception e)
+                    {
+                        if (e.Message.Substring(0, 5) != "42P07")
+                        {
+                            Console.WriteLine(e.Message);
+                            return;
+                        }
+                    }
                 }
-                finally {}
                 
             }
         }
     }
-    
-    protected void ExecuteSQLScript()
+
+    private static void ExecuteSqlScript()
     {
         using (var context = new LibraryContext())
         {
@@ -137,41 +134,22 @@ else
         }
     }
 
-    protected void RentBook(int Id)
+    private void GenerateRentLog(User user)
     {
-        id = Id;
+        Logs newLog =  new();
+        newLog.Username = user.Username;
+        newLog.IsUserAdmin = user.isAdmin;
+        newLog.OperationsType = Logs.OperationType.BookRental;
         using (var db = new LibraryContext())
-        {
-            Book book = new();
-            User user = new();
-            Logs newLog = new();
-            if (ifConnectionSuccessful)
-            {
+            db.logs.Add(newLog);
+    }
 
-                book = db.books
-                .Single(book => book.Id == id);
-                book.isAvailable = false;
-                book.UserId = UserId;
-                db.Entry(book).State = EntityState.Modified;
-                db.SaveChanges();
-
-                user = db.users
-                .Single(user => user.Id == UserId);
-
-                user.Books.Add(book);
-
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
-
-                newLog.Username = user.Username;
-                newLog.IsUserAdmin = user.isAdmin;
-                newLog.OperationsType = Logs.OperationType.BookRental;
-
-                db.logs.Add(newLog);
-            }
-            
-        }
-        Navigator.NavigateTo("/refresh/" + UserId.ToString());
+    private void RentBook(int Id)
+    {
+        Book? book = _books.Find(book => book.Id == Id);
+        if (book is not null)
+            book.BorrowBook(UserId);
+        Navigator.NavigateTo("/refresh");
     }
 }    
 

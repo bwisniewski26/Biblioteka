@@ -1,15 +1,11 @@
 @page "/accountmanager"
 @page "/accountmanager/{id}"
 
-@using BlazorBootstrap
-@using Microsoft.EntityFrameworkCore
-@using ProjektZaliczeniowyPR3.Data
-@using ProjektZaliczeniowyPR3.Models
 @using ProjektZaliczeniowyPR3.DatabaseConnection
 
 @inject ProtectedSessionStorage ProtectedSessionStore
 @inject NavigationManager Navigator
-
+<PageTitle>Biblioteka</PageTitle>
 <h1>Menedżer kont</h1>
 
 @if (!ifConnectionSuccessful)
@@ -43,11 +39,11 @@ else
                             <td>@user.Password</td>
                             @if (user.isAdmin)
                             {
-                                <td>Tak</td>
+                                <td><Icon Name = "IconName.CheckSquareFill" Color = "IconColor.Success"></Icon></td>
                             }
                             else
                             {
-                                <td>Nie</td>
+                                <td><Icon Name = "IconName.XSquareFill" Color = "IconColor.Danger"></Icon></td>
                             }
                             <td>@CalculateBooks(user.Id)</td>
                             <td><Button Color="ButtonColor.Secondary" @onclick = "() => RemoveUser(user.Id)"><Icon Name = "IconName.Trash"></Icon></Button></td>
@@ -71,6 +67,7 @@ else
 
     public bool ifConnectionSuccessful = false;
     User loggedUser = new();
+    Tables table = new();
 
     public int Id = -1;
 
@@ -111,54 +108,21 @@ else
         }
         
     }
-
-    protected List<Book> ListBooks()
-    {
-        List<Book> books = new();
-        using (var db = new LibraryContext())
-        {
-            books = db.books
-            .ToList();
-        }
-        return books;
-    }
-
     
 
     protected void RemoveUser(int Id)
     {
-        if (Id == Convert.ToInt32(id))
-        {
-            response = "Nie możesz usunąć swojego konta!";
-            return;
-        }
-
-        ConnectionInfo info = new();
-        List<Book> books = ListBooks();
-        using (var db = new LibraryContext())
-        {
-            foreach (var book in books)
-            {
-                if (book.UserId == Id)
-                    book.UserId = -1;
-                    db.Entry(book).State = EntityState.Modified;
-            }
-            
-
-            User user = new();
-                user = db.users
-                .Single(user => user.Id == Id);
-
-                db.Entry(user).State = EntityState.Deleted;
-                db.SaveChanges();        
-        }
+        List<User> users = table.ListUsers();
+        User? user = users.Find(user => user.Id == Id);
+        if (user is not null)
+            user.RemoveUser();
         Navigator.NavigateTo("/refresh/accountmanager/" + id);
     }
     
     protected int CalculateBooks(int userId)
     {
         int result = 0;
-        List<Book> books = ListBooks();
+        List<Book> books = table.ListBooks();
         foreach (var book in books)
         {
             if (book.UserId == userId)

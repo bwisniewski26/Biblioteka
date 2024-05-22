@@ -21,7 +21,7 @@
                     @foreach (var book in _books)
                     {
                         <tr>
-                            <td style = "book_title">@book.Title</td>
+                            <td>@book.Title</td>
                             <td>@book.Author</td>
                             <td>@book.Description</td>
                             <td><Button Color="ButtonColor.Secondary" @onclick = "() => ReturnBook(book.Id)"> <Icon Name = "IconName.BookmarkDashFill"></Icon> </Button> </td>
@@ -42,6 +42,7 @@
 
     public List<Book> _books { get; set; } = new();
 
+
     protected override void OnInitialized()
     {
         if (ifConnectionSuccessful && UserId != -1)
@@ -56,36 +57,28 @@
         }
     }
 
-    protected void ReturnBook(int id)
+    private async void ReturnBookLog(User user)
     {
         if (ifConnectionSuccessful)
         {
             using (var db = new LibraryContext())
             {
-                Book book = new();
-                User user = new();
-                Logs newLog = new();
-                    book = db.books
-                    .Single(book => book.Id == id);
-                    book.isAvailable = true;
-                    book.UserId = UserId;
-                    db.Entry(book).State = EntityState.Modified;
-                    db.SaveChanges();
-                    user = db.users
-                    .Single(user => user.Id == UserId);
+            Logs newLog = new();
+            newLog.Username = user.Username;
+            newLog.IsUserAdmin = user.isAdmin;
+            newLog.OperationsType = Logs.OperationType.BookReturn;
 
-                    user.Books.Remove(book);
-                    db.Entry(user).State = EntityState.Modified;
-                    db.SaveChanges();
-
-                    newLog.Username = user.Username;
-                    newLog.IsUserAdmin = user.isAdmin;
-                    newLog.OperationsType = Logs.OperationType.BookReturn;
-
-                    db.logs.Add(newLog);
-
+            db.logs.Add(newLog);
+            await db.SaveChangesAsync();
             }
         }
+    }
+
+    public void ReturnBook(int id)
+    {
+        Book? book = _books.Find(book => book.Id == id);
+        if (book is not null)
+            book.ReturnBook();
         Navigator.NavigateTo("/refresh/");
     }
 }
