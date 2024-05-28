@@ -1,8 +1,12 @@
 using ProjektZaliczeniowyPR3.Components;
 using ProjektZaliczeniowyPR3.Data;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
-using Npgsql;
+using ProjektZaliczeniowyPR3.DatabaseConnection;
+
+byte[] salt = [];
+string pass = "prosteHaslo123!";
+Hashing hash = new();
+Console.WriteLine(hash.GetHash(pass, salt));
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.

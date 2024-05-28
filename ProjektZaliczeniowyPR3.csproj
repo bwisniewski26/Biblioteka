@@ -14,6 +14,13 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
+    <PackageReference Include="NUnit" Version="3.13.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="LibraryTests\obj\LibraryTests.csproj.nuget.dgspec.json" />
+    <_ContentIncludedByDefault Remove="LibraryTests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="LibraryTests\obj\project.packagespec.json" />
   </ItemGroup>
 
 </Project>

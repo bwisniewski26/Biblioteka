@@ -204,7 +204,8 @@ else
                     break;   
                 case (LoginStatus.LoginSuccessful):
                     SetLoginParameters(loggedUser);
-                    Navigator.NavigateTo("/account");
+                    ShowMessage(ToastType.Success);
+                    Navigator.NavigateTo("/refresh");
                     break;
                 case (LoginStatus.ConnectionFailed):
                     Response = "Błąd połączenia z bazą danych!";
@@ -248,7 +249,7 @@ else
             }
         }
 
-        private async void InsertBookIntoDb(Book newBook)
+        private void InsertBookIntoDb(Book newBook)
         {
             if (_newBook.Author.Length > 0 && _newBook.Title.Length > 0)
             {
