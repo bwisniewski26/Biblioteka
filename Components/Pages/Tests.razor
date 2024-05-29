@@ -1,0 +1,47 @@
+@page "/unit_tests"
+@using ProjektZaliczeniowyPR3.LibraryTests
+
+<h3>Testy jednostkowe</h3>
+
+<p><b>Raport z testów jednostkowych:</b></p>
+<ul>
+    <li>Jednoznaczność enkrypcji:
+        @if (EncryptionUnambiguity)
+        {
+        <p style = "color: green;">Powodzenie!</p>
+        } else
+        {
+        <p style = "color: red;">Niepowodzenie!</p>
+        }
+    </li>
+    <li>Unikalność enkrypcji:
+        @if (EncryptionUniqueness)
+        {
+            <p style = "color: green;">Powodzenie!</p>
+        } else
+        {
+            <p style = "color: red;">Niepowodzenie!</p>
+        }
+    </li>
+    <li>Odpowiednia długość soli:</li>
+    @if (SaltLength)
+    {
+    <p style = "color: green;">Powodzenie!</p>
+    } else
+    {
+    <p style = "color: red;">Niepowodzenie!</p>
+    }
+</ul>
+
+@code {
+    bool EncryptionUnambiguity, EncryptionUniqueness, SaltLength;
+    
+    protected override void OnInitialized()
+    {
+        UnitTests test = new();
+        
+        EncryptionUnambiguity = test.TestEncryptionUnambiguity();
+        EncryptionUniqueness = test.TestEncryptionUniqueness();
+        SaltLength = test.TestSaltLength();
+    }
+}

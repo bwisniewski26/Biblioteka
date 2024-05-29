@@ -1,4 +1,6 @@
-﻿namespace ProjektZaliczeniowyPR3.LibraryTests;
+﻿using Microsoft.EntityFrameworkCore.Query.Internal;
+
+namespace ProjektZaliczeniowyPR3.LibraryTests;
 
 using ProjektZaliczeniowyPR3.DatabaseConnection;
 
@@ -45,8 +47,19 @@ public class UnitTests
     }
 
     [Test]
-    public bool TestSuccessfulLogin()
+    public bool TestSaltLength()
     {
+        Hashing hash = new();
+        byte[] salt = hash.GetSalt();
+        try
+        {
+            Assert.AreEqual(16, salt.Length);
+        }
+        catch (AssertionException)
+        {
+            return false;
+        }
+
         return true;
     }
 }

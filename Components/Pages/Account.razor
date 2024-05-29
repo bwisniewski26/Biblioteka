@@ -8,7 +8,7 @@
 @using ProjektZaliczeniowyPR3.Objects
 
 <PageTitle>Panel użytkownika</PageTitle>
-<Toasts class="p-3" Messages="_toastMessages" Delay="1000" Placement="ToastsPlacement.TopRight" />
+<Toasts class="p-3" Messages="_toastMessages" Delay="2000" Placement="ToastsPlacement.TopRight" />
 <Modal @ref="_modal" />
 
 
@@ -158,14 +158,6 @@ else
             return users;
         }
 
-        private async void SetLoginParameters(User login)
-        {
-            await ProtectedSessionStore.SetAsync("uId", login.Id);
-            _isAdmin = login.isAdmin;
-            _isLoggedIn = true;
-            LoggedUser = login;
-        }
-
         private void GenerateLoginLog(User login)
         {
             Logs newLog = new();
@@ -185,7 +177,7 @@ else
                 db.logs.Add(newLog);
             }
         }
-        private void LogIn()
+        private async void LogIn()
         {
             
             Authentication authentication = new();
@@ -203,9 +195,13 @@ else
                     StateHasChanged();
                     break;   
                 case (LoginStatus.LoginSuccessful):
-                    SetLoginParameters(loggedUser);
+                    await ProtectedSessionStore.SetAsync("uId", loggedUser.Id);
+                    _isLoggedIn = true;
+                    _isAdmin = loggedUser.isAdmin;
+                    LoggedUser = loggedUser;
+                    GenerateLoginLog(loggedUser);
                     ShowMessage(ToastType.Success);
-                    Navigator.NavigateTo("/refresh");
+                    StateHasChanged();
                     break;
                 case (LoginStatus.ConnectionFailed):
                     Response = "Błąd połączenia z bazą danych!";
@@ -230,8 +226,10 @@ else
         private void LogOut()
         {
             ClearInput();
+            _isLoggedIn = false;
+            _isAdmin = false;
             ShowMessage(ToastType.Info);
-            Navigator.NavigateTo("/");
+            StateHasChanged();
         }
 
         private async void GenerateAddBookLog()

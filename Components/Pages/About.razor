@@ -16,28 +16,6 @@
         <li>Entity Framework Core</li>
         <li>Biblioteki kryptograficzne</li>
     </ul>
-
-    <p><b>Raport z testów jednostkowych:</b></p>
-    <ul>
-        <li>Jednoznaczność enkrypcji:
-            @if (EncryptionUnambiguity)
-            {
-                <p style = "color: green;">Powodzenie!</p>    
-            } else 
-            {
-                <p style = "color: red;">Niepowodzenie!</p>
-            }
-        </li>
-        <li>Unikalność enkrypcji:
-            @if (EncryptionUnambiguity)
-            {
-                <p style = "color: green;">Powodzenie!</p>    
-            } else 
-            {
-                <p style = "color: red;">Niepowodzenie!</p>
-            }
-        </li>
-    </ul>
 </div>
 
 
@@ -45,15 +23,3 @@
     <p>2024 Bartłomiej Wiśniewski</p>
 </div>
 
-
-@code {
-    bool EncryptionUnambiguity, EncryptionUniqueness;
-
-    protected override void OnInitialized()
-    {
-        UnitTests test = new();
-        
-        EncryptionUnambiguity = test.TestEncryptionUnambiguity();
-        EncryptionUniqueness = test.TestEncryptionUniqueness();
-    }
-}
