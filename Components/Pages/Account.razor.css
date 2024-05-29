@@ -30,6 +30,11 @@ div.database_status {
     bottom:0px;
 }
 
+div.add_book.p
+{
+    color: red;
+}
+
 input {
     background-image: url("/dololo.jpg");
 }

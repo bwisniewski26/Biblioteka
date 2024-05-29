@@ -9,7 +9,12 @@
 
 <PageTitle>Panel użytkownika</PageTitle>
 <Toasts class="p-3" Messages="_toastMessages" Delay="2000" Placement="ToastsPlacement.TopRight" />
-<Modal @ref="_modal" />
+<Modal @ref="_modal">
+    <p>Zamierzasz wyczyścić tabelę z bazy danych</p>
+    <p>Po zaakceptowaniu koniecznie będzie przeladowanie strony.</p>
+    <p>Czy chcesz kontynuować?</p>
+    <Button Color="ButtonColor.Success" @onclick="async () => { await _modal.HideAsync(); } "> Nie </Button> <Button Color="ButtonColor.Danger" @onclick = "Execute" style="float: right;"> Tak </Button>
+</Modal>
 
 
 @if (!_isLoggedIn)
@@ -39,6 +44,7 @@ else
     
     @if (_isAdmin)
     {
+        <div class="add_book">
         <p>Dodaj nową książkę</p>
         <br/>
         <p>Tytuł</p>
@@ -49,6 +55,8 @@ else
         <p>Opis</p>
         <input @bind = "_newBook.Description">
         <Button Color="ButtonColor.Success" @onclick = "AddBook"><b><Icon Name = "IconName.Floppy"></Icon> Zapisz</b></Button>
+        <p>@Response</p>
+        </div>
         <br/>
             
             <hr class="rounded">
@@ -89,6 +97,7 @@ else
 
 
 @code {
+        Tables _tables = new();
         private Modal _modal = default!;
         List<ToastMessage> _toastMessages = new List<ToastMessage>();
 
@@ -103,6 +112,8 @@ else
 
         public int Id {get; set;} = -1;
 
+        protected int Mode = -1;
+
         Book _newBook = new();
 
         private Hashing _hashing = new();
@@ -112,6 +123,9 @@ else
 
         protected override void OnInitialized()
         {
+            _newBook.Title = "";
+            _newBook.Author = "";
+            _newBook.Description = "";
             ConnectionInfo info = new();
             _connectionSuccessful = info.TryConnection();
         }
@@ -257,9 +271,16 @@ else
         
         private void AddBook()
         {
+            if (_newBook.Author.Length > 0 && _newBook.Title.Length > 0)
+            {
             InsertBookIntoDb(_newBook);
             GenerateAddBookLog();
             Navigator.NavigateTo("/refresh/");
+            }
+            else
+            {
+                Response = "Brak autora lub tytułu!";
+            }
         }
 
         private void ShowMessage(ToastType toastType) => _toastMessages.Add(CreateToastMessage(toastType));
@@ -316,9 +337,37 @@ else
             GenerateClearTableLog();
             var parameters = new Dictionary<string, object>();
             parameters.Add("Mode", 1);
-            await _modal.ShowAsync<Confirmation>(title: "Czyszczenie bazy danych", parameters: parameters);
+            await _modal.ShowAsync<Account>(title: "Czyszczenie bazy danych", parameters: parameters);
             StateHasChanged();
             Navigator.NavigateTo("/");
+        }
+
+        protected async Task HideModal()
+        {
+            await _modal.HideAsync();
+        }
+        
+        protected async Task Execute()
+        {
+            if (Mode == 1)
+            {
+                RemoveUsers();
+                await _modal.HideAsync();
+            }
+            else if (Mode == 2)
+            {
+                RemoveBooks();
+                await _modal.HideAsync();
+            }
+        }
+        protected void RemoveUsers()
+        {
+            _tables.RemoveUsers();
+        }
+
+        protected void RemoveBooks()
+        {
+            _tables.RemoveBooks();
         }
 }
 

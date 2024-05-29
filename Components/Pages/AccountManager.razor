@@ -24,7 +24,6 @@ else
         <table>
             <thead>
                 <th>Nazwa użytkownika</th>
-                <th>Hash hasła</th>
                 <th>Administrator?</th>
                 <th>Ilość książek</th>
                 <th>Usuń konto</th>
@@ -36,7 +35,6 @@ else
                     {
                         <tr>
                             <td>@user.Username</td>
-                            <td>@user.Password</td>
                             @if (user.isAdmin)
                             {
                                 <td><Icon Name = "IconName.CheckSquareFill" Color = "IconColor.Success"></Icon></td>
