@@ -1,8 +1,4 @@
 main.page {
-    background-image: url("/dololo.jpg");
-    background-repeat: no-repeat;
-    background-attachment: fixed; 
-    background-size: 100% 100%;
     font-size: 24px;
     color: black;
     font-family: Verdana, sans-serif;
